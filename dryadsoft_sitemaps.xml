@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
    <url>
       <loc>https://dryadsoft.github.io/posts/gulp/1</loc>
       <changefreq>always</changefreq>
    </url>
    <url>
-      <loc>https://dryadsoft.github.io/posts/git/2/loc>
+      <loc>https://dryadsoft.github.io/posts/git/2/loc></loc>
       <changefreq>always</changefreq>
    </url>
    <url>
