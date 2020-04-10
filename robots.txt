@@ -1,4 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow: /
-Sitemap: https://dryadsoft.github.io/dryadsoft_sitemaps.xml
+Sitemap: https://dryadsoft.github.io/sitemap.xml
