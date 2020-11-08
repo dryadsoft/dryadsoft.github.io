@@ -1,77 +1,81 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  NavLink
-} from "react-router-dom";
+import { HashRouter as Router, Route, Switch, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import Home from "./Home";
 import Post from "./Post";
 import Detail from "./Detail";
 import Navigation from "./components/Navigation";
-// import { library } from "@fortawesome/fontawesome-svg-core";
-// import {
-//   faAsterisk,
-//   faSpinner,
-//   faTable
-// } from "@fortawesome/free-solid-svg-icons";
-// library.add(faAsterisk, faSpinner, faTable);
-import { faBars, faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  width: 100vw;
-  overflow-y: auto;
+  @media (max-width: 1024px) {
+    grid-template-columns: minmax(100px, 1024px);
+  }
 
-  @media (min-width: 1280px) {
-    width: 1280px;
-    display: grid;
-    grid-template-columns: 1fr 250px;
-    grid-template-rows: 50px 1fr 50px;
-
-    nav {
-      grid-area: 1/2/4/3;
-      position: sticky;
+  @media (min-width: 1024px) {
+    grid-template-columns: 300px minmax(100px, 1024px);
+    & header {
+      grid-column: 2/3;
+      & div:first-child {
+        display: none;
+      }
     }
-    header {
-      grid-area: 1/1/2/2;
+    & main {
+      grid-column: 2/3;
     }
-    main {
-      grid-area: 2/1/3/2;
-    }
-    footer {
-      grid-area: 3/1/4/2;
-    }
-    .header-menu {
-      visibility: hidden;
+    & nav {
+      grid-column: 1/2;
+      grid-row: 2/3;
+      width: 300px;
     }
   }
 `;
 
-const StyledHeaderCol = styled.div`
-  width: 50px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-const StyledHeaderTitle = styled.div`
-  flex: 1;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-`;
 const Header = styled.header`
   height: 50px;
-  border-bottom: 1px solid #e9ecef;
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: space-between;
-  z-index: 2;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+  background-color: #fff;
+  & div:nth-child(3) {
+    width: 50px;
+    height: 50px;
+    font-size: 44px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:active {
+      background-color: #ade1f5;
+    }
+  }
+  & div:nth-child(2) {
+    font-size: 20px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  & div:nth-child(1) {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:active {
+      background-color: #ade1f5;
+    }
+  }
 `;
 
+const Main = styled.main`
+  flex: 1;
+`;
 interface linkProps {
   issearch: string;
 }
@@ -101,11 +105,6 @@ const StyledInput = styled.input<linkProps>`
   display: ${props => (props.issearch === "true" ? "" : "none")};
 `;
 
-const StyledMain = styled.main`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
 function App() {
   const [hidden, setHidden] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
@@ -128,13 +127,16 @@ function App() {
     setIsSearch(!isSearch);
   };
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router>
       <Container>
         <Header>
-          <StyledHeaderCol onClick={searchClick}>
-            <FontAwesomeIcon icon={faSearch} size="lg" />
-          </StyledHeaderCol>
-          <StyledHeaderTitle>
+          <div onClick={searchClick}>
+            <span role="img" aria-label="">
+              🔍
+            </span>
+          </div>
+
+          <div>
             <StyledNavLink
               issearch={isSearch.toString()}
               onClick={() => setHidden(true)}
@@ -150,19 +152,17 @@ function App() {
               type="text"
               placeholder="검색어를 입력하십시오."
             />
-          </StyledHeaderTitle>
-          <StyledHeaderCol onClick={navClick}>
-            <FontAwesomeIcon icon={faBars} size="2x" />
-          </StyledHeaderCol>
+          </div>
+          <div onClick={navClick}>≡</div>
         </Header>
         <Navigation hidden={hidden} navClick={navClick} />
-        <StyledMain>
+        <Main>
           <Switch>
             <Route exact={true} path="/" component={Home} />
             <Route path="/posts/:category/:seq" component={Detail} />
             <Route path="/posts/:category" component={Post} />
           </Switch>
-        </StyledMain>
+        </Main>
       </Container>
     </Router>
   );
