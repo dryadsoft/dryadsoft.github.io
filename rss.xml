@@ -1,0 +1,1079 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Dryad]]></title><description><![CDATA[Blog posted about ...]]></description><link>https://dryadsoft.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 08 Nov 2020 09:31:58 GMT</lastBuildDate><item><title><![CDATA[gulp - node + typescript 컴파일하기]]></title><description><![CDATA[목차 gulp - babel을 이용하여 개발 환경설정 gulp - javascript를 babel을 이용하여 컴파일하기 2-1. gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기 gulp - node…]]></description><link>https://dryadsoft.github.io/gulp.js/gulp---node-+-typescript-컴파일하기/</link><guid isPermaLink="false">https://dryadsoft.github.io/gulp.js/gulp---node-+-typescript-컴파일하기/</guid><pubDate>Sun, 08 Nov 2020 18:12:38 GMT</pubDate><content:encoded>&lt;h3 id=&quot;목차&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8&quot; aria-label=&quot;목차 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/1&quot;&gt;gulp - babel을 이용하여 개발 환경설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;../gulp/9&quot;&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2-1. &lt;a href=&quot;../gulp/11&quot;&gt;gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gulp - node + typescript 컴파일하기&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#typescript-%EB%AA%A8%EB%93%88-%EC%84%A4%EC%B9%98&quot;&gt;typescript 모듈 설치&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#typescript-%EC%98%88%EC%A0%9C%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1&quot;&gt;typescript 예제파일 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#root%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%EC%97%90-tsconfig.json%ED%8C%8C%EC%9D%BC-%EC%83%9D%EC%84%B1&quot;&gt;root디렉토리에 tsconfig.json파일 생성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulpfile.babel.js-%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1&quot;&gt;gulpfile.babel.js 파일 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89&quot;&gt;gulp 실행&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0&quot;&gt;node 실행하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;이번 강좌는 nodejs를 typescript를 이용하여 작성하는 방법을 알아보겠다.
+기본적인 gulp개발환경설정은 &lt;a href=&quot;../gulp/1&quot;&gt;이전포스트&lt;/a&gt;에서 확인 할 수 있다.&lt;/p&gt;
+&lt;h2 id=&quot;div-idtypescript-모듈-설치typescript-모듈-설치div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idtypescript-%EB%AA%A8%EB%93%88-%EC%84%A4%EC%B9%98typescript-%EB%AA%A8%EB%93%88-%EC%84%A4%EC%B9%98div&quot; aria-label=&quot;div idtypescript 모듈 설치typescript 모듈 설치div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;typescript-모듈-설치&quot;&gt;typescript 모듈 설치&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; typescript gulp gulp-typescript -D&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idtypescript-예제파일-작성typescript-예제파일-작성div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idtypescript-%EC%98%88%EC%A0%9C%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1typescript-%EC%98%88%EC%A0%9C%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1div&quot; aria-label=&quot;div idtypescript 예제파일 작성typescript 예제파일 작성div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;typescript-예제파일-작성&quot;&gt;typescript 예제파일 작성&lt;/div&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;src/components 폴더안에 utils.ts 파일을 생성한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;typescript&quot;&gt;&lt;pre class=&quot;language-typescript&quot;&gt;&lt;code class=&quot;language-typescript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; hello &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;message&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token template-string&quot;&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;hello &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;${&lt;/span&gt;message&lt;span class=&quot;token interpolation-punctuation punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token template-punctuation string&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;default&lt;/span&gt; hello&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;src폴더안에 index.ts 파일을 생성한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;typescript&quot;&gt;&lt;pre class=&quot;language-typescript&quot;&gt;&lt;code class=&quot;language-typescript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; hello &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;./components/utils&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;aplus&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;a&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; b&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;number&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token builtin&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;a &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; b&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;typescript&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;aplus&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idroot디렉토리에-tsconfigjson파일-생성root디렉토리에-tsconfigjson파일-생성div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idroot%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%EC%97%90-tsconfigjson%ED%8C%8C%EC%9D%BC-%EC%83%9D%EC%84%B1root%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%EC%97%90-tsconfigjson%ED%8C%8C%EC%9D%BC-%EC%83%9D%EC%84%B1div&quot; aria-label=&quot;div idroot디렉토리에 tsconfigjson파일 생성root디렉토리에 tsconfigjson파일 생성div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;root디렉토리에-tsconfig.json파일-생성&quot;&gt;root디렉토리에 tsconfig.json파일 생성&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json&quot;&gt;&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;include&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;src&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;compilerOptions&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;noImplicitAny&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;target&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;es6&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;module&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;commonjs&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;moduleResolution&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;node&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;baseUrl&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;paths&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;token property&quot;&gt;&quot;*&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;node_modules/*&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;src/types/*&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;strict&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;/* Enable all strict type-checking options. */&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;allowSyntheticDefaultImports&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;esModuleInterop&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;forceConsistentCasingInFileNames&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgulpfilebabeljs-파일-작성gulpfilebabeljs-파일-작성div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgulpfilebabeljs-%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1gulpfilebabeljs-%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1div&quot; aria-label=&quot;div idgulpfilebabeljs 파일 작성gulpfilebabeljs 파일 작성div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gulpfile.babel.js-파일-작성&quot;&gt;gulpfile.babel.js 파일 작성&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; gulp &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp&apos;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; ts &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp-typescript&apos;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; tsProject &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; ts&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;createProject&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;tsconfig.json&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; routes &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  typescript&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    dest&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;build&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;typescript&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+  tsProject
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;tsProject&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gulp&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;dest&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;routes&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;typescript&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dest&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; dev &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gulp&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;series&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;typescript&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgulp-실행gulp-실행div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgulp-%EC%8B%A4%ED%96%89gulp-%EC%8B%A4%ED%96%89div&quot; aria-label=&quot;div idgulp 실행gulp 실행div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gulp-실행&quot;&gt;gulp 실행&lt;/div&gt;&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;gulp를 실행하면 아래와 같이 js가 먼저 실행된 후 typescript가 정상적으로 실행된걸 확인 할 수 있다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; dev
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; run v1.21.0
+$ gulp dev
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:07:28&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Requiring external module @babel/register
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:07:29&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Using gulpfile D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workspace&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;dryadsoft&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulp&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulp_typescript&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulpfile.babel.js
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:07:29&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starting &lt;span class=&quot;token string&quot;&gt;&apos;dev&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:07:29&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starting &lt;span class=&quot;token string&quot;&gt;&apos;typescript&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:07:31&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Finished &lt;span class=&quot;token string&quot;&gt;&apos;typescript&apos;&lt;/span&gt; after &lt;span class=&quot;token number&quot;&gt;1.44&lt;/span&gt; s
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:07:31&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Finished &lt;span class=&quot;token string&quot;&gt;&apos;dev&apos;&lt;/span&gt; after &lt;span class=&quot;token number&quot;&gt;1.45&lt;/span&gt; s
+Done &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;.38s.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;실행결과 root디렉토리의 지정한 build폴더에 컴파일된 파일이 아래와 같이 node에서 실행할 수 있는 js파일로 변환되어 생성된다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// utils.ts -&gt; utils.js&lt;/span&gt;
+&lt;span class=&quot;token string&quot;&gt;&apos;use strict&apos;&lt;/span&gt;
+Object&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;defineProperty&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exports&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;__esModule&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; value&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;hello &apos;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; message&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+exports&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;default &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; hello&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// index.ts -&gt; index.js&lt;/span&gt;
+&lt;span class=&quot;token string&quot;&gt;&apos;use strict&apos;&lt;/span&gt;
+Object&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;defineProperty&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exports&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;__esModule&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; value&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; tsUtil_1 &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;./tsUtil&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;aplus&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;a&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; b&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;a &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; b&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+tsUtil_1&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;typescript&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;aplus&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idnode-실행하기node-실행하기div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idnode-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0div&quot; aria-label=&quot;div idnode 실행하기node 실행하기div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;node-실행하기&quot;&gt;node 실행하기&lt;/div&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;실행은 index.ts파일이 아닌 컴파일되어 생성된 index.js파일을 실행한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ node build/index.js
+hello typescript
+&lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;목차-1&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8-1&quot; aria-label=&quot;목차 1 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/1&quot;&gt;gulp - babel을 이용하여 개발 환경설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;../gulp/9&quot;&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2-1. &lt;a href=&quot;../gulp/11&quot;&gt;gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gulp - node + typescript 컴파일하기&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#typescript-%EB%AA%A8%EB%93%88-%EC%84%A4%EC%B9%98&quot;&gt;typescript 모듈 설치&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#typescript-%EC%98%88%EC%A0%9C%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1&quot;&gt;typescript 예제파일 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#root%EB%94%94%EB%A0%89%ED%86%A0%EB%A6%AC%EC%97%90-tsconfig.json%ED%8C%8C%EC%9D%BC-%EC%83%9D%EC%84%B1&quot;&gt;root디렉토리에 tsconfig.json파일 생성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulpfile.babel.js-%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1&quot;&gt;gulpfile.babel.js 파일 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89&quot;&gt;gulp 실행&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0&quot;&gt;node 실행하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[nodejs - nvm을 이용하여 nodejs 버전관리 하기]]></title><description><![CDATA[목차 기존 설치되어있던 nodejs와 npm과련 폴더 삭제(nodejs 설치시 자동설치됨) nvm 설치 nvm을 이용하여 nodejs 설치 설치된 nodejs 리스트 조회 nvm을 이용하여 설치된 nodejs…]]></description><link>https://dryadsoft.github.io/node.js/nodejs---nvm을-이용하여-nodejs-버전관리-하기/</link><guid isPermaLink="false">https://dryadsoft.github.io/node.js/nodejs---nvm을-이용하여-nodejs-버전관리-하기/</guid><pubDate>Sun, 08 Nov 2020 18:12:15 GMT</pubDate><content:encoded>&lt;h3 id=&quot;목차&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8&quot; aria-label=&quot;목차 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;기존 설치되어있던 nodejs와 npm과련 폴더 삭제(nodejs 설치시 자동설치됨)&lt;/li&gt;
+&lt;li&gt;nvm 설치&lt;/li&gt;
+&lt;li&gt;nvm을 이용하여 nodejs 설치&lt;/li&gt;
+&lt;li&gt;설치된 nodejs 리스트 조회&lt;/li&gt;
+&lt;li&gt;nvm을 이용하여 설치된 nodejs 버전별 선택하여 사용 설정&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;기존-설치되어있던-nodejs와-npm과련-폴더-삭제nodejs-설치시-자동설치됨&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EA%B8%B0%EC%A1%B4-%EC%84%A4%EC%B9%98%EB%90%98%EC%96%B4%EC%9E%88%EB%8D%98-nodejs%EC%99%80-npm%EA%B3%BC%EB%A0%A8-%ED%8F%B4%EB%8D%94-%EC%82%AD%EC%A0%9Cnodejs-%EC%84%A4%EC%B9%98%EC%8B%9C-%EC%9E%90%EB%8F%99%EC%84%A4%EC%B9%98%EB%90%A8&quot; aria-label=&quot;기존 설치되어있던 nodejs와 npm과련 폴더 삭제nodejs 설치시 자동설치됨 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;기존 설치되어있던 nodejs와 npm과련 폴더 삭제(nodejs 설치시 자동설치됨)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/coreybutler/nvm-windows/releases&quot;&gt;nvm-windows&lt;/a&gt; 설치시 npm설정이 업데이트가 되지 않기때문에 nodejs와 npm 관련 폴더를 모두 삭제한다.&lt;/li&gt;
+&lt;li&gt;npm 폴더위치&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;  C:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Users&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;AppData&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Roaming&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;npm
+  C:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Users&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;AppData&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Roaming&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;npm-cache&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;nvm설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#nvm%EC%84%A4%EC%B9%98&quot; aria-label=&quot;nvm설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;nvm설치&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/coreybutler/nvm-windows/releases&quot;&gt;nvm-windows&lt;/a&gt;을 다운 받을 수 있는 사이트로 이동한다.&lt;/li&gt;
+&lt;li&gt;nvm-setup.zip 파일을 다운받은 후 PC에 설치를 진행한다.&lt;/li&gt;
+&lt;li&gt;설치팝업창에서 next 버튼을 클릭하여 기본설치를 한다.
+&lt;img src=&quot;../../../images/20200326001_1.png&quot; alt=&quot;nvm-windows&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;nvm을-이용하여-nodejs-설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#nvm%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-nodejs-%EC%84%A4%EC%B9%98&quot; aria-label=&quot;nvm을 이용하여 nodejs 설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;nvm을 이용하여 nodejs 설치&lt;/h2&gt;
+&lt;p&gt;nvm 설치가 끝났으면 설치하고자 하는 nodejs버전을 nvm 명령어를 이용하여 설치한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;  &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; nvm instail v10.13.0
+  &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; nvm instail v12.16.1
+
+  위와 같이 여러 버전의 nodejs 를 설치 할 수 있다.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;설치된-nodejs-리스트-조회&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EC%84%A4%EC%B9%98%EB%90%9C-nodejs-%EB%A6%AC%EC%8A%A4%ED%8A%B8-%EC%A1%B0%ED%9A%8C&quot; aria-label=&quot;설치된 nodejs 리스트 조회 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;설치된 nodejs 리스트 조회&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;  &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; nvm list&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;nvm을-이용하여-설치된-nodejs-버전별-선택하여-사용-설정&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#nvm%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%84%A4%EC%B9%98%EB%90%9C-nodejs-%EB%B2%84%EC%A0%84%EB%B3%84-%EC%84%A0%ED%83%9D%ED%95%98%EC%97%AC-%EC%82%AC%EC%9A%A9-%EC%84%A4%EC%A0%95&quot; aria-label=&quot;nvm을 이용하여 설치된 nodejs 버전별 선택하여 사용 설정 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;nvm을 이용하여 설치된 nodejs 버전별 선택하여 사용 설정&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;  nvm use &lt;span class=&quot;token number&quot;&gt;10.13&lt;/span&gt;.0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;목차-1&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8-1&quot; aria-label=&quot;목차 1 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;기존 설치되어있던 nodejs와 npm과련 폴더 삭제(nodejs 설치시 자동설치됨)&lt;/li&gt;
+&lt;li&gt;nvm 설치&lt;/li&gt;
+&lt;li&gt;nvm을 이용하여 nodejs 설치&lt;/li&gt;
+&lt;li&gt;설치된 nodejs 리스트 조회&lt;/li&gt;
+&lt;li&gt;nvm을 이용하여 설치된 nodejs 버전별 선택하여 사용 설정&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[gulp - babel을 이용하여 개발 환경설정]]></title><description><![CDATA[목차 gulp - babel을 이용하여 개발 환경설정 gulp - javascript를 babel을 이용하여 컴파일하기 2-1. gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기 gulp - node…]]></description><link>https://dryadsoft.github.io/gulp.js/gulp---babel을-이용하여-개발-환경설정/</link><guid isPermaLink="false">https://dryadsoft.github.io/gulp.js/gulp---babel을-이용하여-개발-환경설정/</guid><pubDate>Sun, 08 Nov 2020 18:12:10 GMT</pubDate><content:encoded>&lt;h3 id=&quot;목차&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8&quot; aria-label=&quot;목차 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;gulp - babel을 이용하여 개발 환경설정&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;../gulp/9&quot;&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2-1. &lt;a href=&quot;../gulp/11&quot;&gt;gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/10&quot;&gt;gulp - node + typescript 컴파일하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;gulp-란-무엇인가&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#gulp-%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80&quot; aria-label=&quot;gulp 란 무엇인가 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;gulp 란 무엇인가?&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;gulp는 흔히 Task Runner로 알려져있다.
+많은 일을 Task로 만들고 그 Task를 실행하면
+그결과물을 자동으로 생성해준다.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;task-란&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#task-%EB%9E%80&quot; aria-label=&quot;task 란 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Task 란?&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;자동 이미지압축&lt;/li&gt;
+&lt;li&gt;최신자바스크립트를 구형브라우저에서 이해 할 수 있도록 컴파일.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;위 1번, 2번과 같은 일을 Task로 만들어서 사용한다.&lt;/p&gt;
+&lt;h2 id=&quot;gulp-개발환경-설정&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#gulp-%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95&quot; aria-label=&quot;gulp 개발환경 설정 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;gulp 개발환경 설정&lt;/h2&gt;
+&lt;h3 id=&quot;1-gulp-전역-설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#1-gulp-%EC%A0%84%EC%97%AD-%EC%84%A4%EC%B9%98&quot; aria-label=&quot;1 gulp 전역 설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;1. gulp 전역 설치&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;yarn 사용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;  &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; global &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; gulp-cli&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;npm 사용&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;  &lt;span class=&quot;token function&quot;&gt;npm&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; gulp-cli -g&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;2-dev옵션으로-gulp설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#2-dev%EC%98%B5%EC%85%98%EC%9C%BC%EB%A1%9C-gulp%EC%84%A4%EC%B9%98&quot; aria-label=&quot;2 dev옵션으로 gulp설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;2. dev옵션으로 gulp설치&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; gulp -D&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;페키지안에서 scripts 명령어로 사용하기 위하여 dev 옵션으로도 설치한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;3-작업폴더-생성&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#3-%EC%9E%91%EC%97%85%ED%8F%B4%EB%8D%94-%EC%83%9D%EC%84%B1&quot; aria-label=&quot;3 작업폴더 생성 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;3. 작업폴더 생성&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;dos&quot;&gt;&lt;pre class=&quot;language-dos&quot;&gt;&lt;code class=&quot;language-dos&quot;&gt;&amp;gt; mkdir src   -&amp;gt; 컴파일 대상이되는 파일들을 넣는다.
+&amp;gt; mkdir src/components   -&amp;gt; src 내부폴더 생성&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;src -&gt; 컴파일 대상이 되는 파일 및 폴더를 넣는다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;4-gulpfilejs-파일-생성&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#4-gulpfilejs-%ED%8C%8C%EC%9D%BC-%EC%83%9D%EC%84%B1&quot; aria-label=&quot;4 gulpfilejs 파일 생성 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;4. gulpfile.js 파일 생성&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;프로젝트 root 디렉토리에 gulpfile.js 파일을 생성한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;gulp파일-babel-컴파일-적용&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#gulp%ED%8C%8C%EC%9D%BC-babel-%EC%BB%B4%ED%8C%8C%EC%9D%BC-%EC%A0%81%EC%9A%A9&quot; aria-label=&quot;gulp파일 babel 컴파일 적용 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;gulp파일 babel 컴파일 적용&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;최신 자바스크립트를 사용하기 위하여 gulp 파일에 babel 컴파일을 적용한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;1-gulpfilejs-파일-명칭-변경&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#1-gulpfilejs-%ED%8C%8C%EC%9D%BC-%EB%AA%85%EC%B9%AD-%EB%B3%80%EA%B2%BD&quot; aria-label=&quot;1 gulpfilejs 파일 명칭 변경 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;1. gulpfile.js 파일 명칭 변경&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;gulpfile.j&lt;/strong&gt; 파일의 명칭을 &lt;strong&gt;gulpfile.babel.js&lt;/strong&gt; 로 변경한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;.babelrc&lt;/strong&gt; 파일을 생성 후 아래와 같이 작성한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json&quot;&gt;&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;.babelrc 파일 작성
+&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token property&quot;&gt;&quot;presets&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;@babel/preset-env&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;
+&lt;p&gt;@babel 모듈 설치&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;@babel 모듈은 모두 devDependencies로 설치한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; @babel/register @babel/core @babel/preset-env -D&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;gulp-실행-확인&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89-%ED%99%95%EC%9D%B8&quot; aria-label=&quot;gulp 실행 확인 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;gulp 실행 확인&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;em&gt;package.json&lt;/em&gt; 파일에 &lt;strong&gt;scripts&lt;/strong&gt;를 작성한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json&quot;&gt;&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;  ...
+  &lt;span class=&quot;token property&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;dev&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;gulp dev&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  ...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;&lt;em&gt;srcipts&lt;/em&gt;에서 작성한 &lt;strong&gt;dev&lt;/strong&gt;를 실행한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; dev&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;실행결과는 아래와같이 오류가 발생한다.
+아직 gulpfile.babel.js파일에 &lt;strong&gt;dev&lt;/strong&gt;라는 task를 만들지 않았기 때문에 아래와 같은 오류가 발생하는게 정상이다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; dev
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; run v1.21.0
+$ gulp dev
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:11:27&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Requiring external module @babel/register
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:11:29&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Using gulpfile D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workspace&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;typescript&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulptypescript&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulpfile.babel.js
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:11:29&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Task never defined: dev
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:11:29&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; To list available tasks, try running: gulp --tasks
+error Command failed with &lt;span class=&quot;token builtin class-name&quot;&gt;exit&lt;/span&gt; code &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;.
+info Visit https://yarnpkg.com/en/docs/cli/run &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; documentation about this command.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;gulp를 최신자바스크립트를 사용하기위한 모든 설정이 끝났다.
+다음포트스에서 &lt;em&gt;gulpfile.babel.js&lt;/em&gt; 파일에 &lt;em&gt;task&lt;/em&gt;를 만들어 컴파일하는 방법을 작성하도록 하겠다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;목차-1&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8-1&quot; aria-label=&quot;목차 1 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;gulp - babel을 이용하여 개발 환경설정&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;../gulp/9&quot;&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2-1. &lt;a href=&quot;../gulp/11&quot;&gt;gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/10&quot;&gt;gulp - node + typescript 컴파일하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[React Native CLI 시작하기 - 2. Wi-fi 디버깅]]></title><description><![CDATA[React Native 블로그에 있는 내용을 정리한다. 개발환경 Windows 10
+React Native CLI
+React Native 0.61
+Android Device
+Android 10
+Visual Studio Code Note PC…]]></description><link>https://dryadsoft.github.io/react-native/react-native-cli-시작하기---2.-wi-fi-디버깅/</link><guid isPermaLink="false">https://dryadsoft.github.io/react-native/react-native-cli-시작하기---2.-wi-fi-디버깅/</guid><pubDate>Sun, 08 Nov 2020 18:12:09 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://facebook.github.io/react-native/docs/running-on-device&quot;&gt;React Native&lt;/a&gt; 블로그에 있는 내용을 정리한다.&lt;/p&gt;
+&lt;h3 id=&quot;개발환경&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD&quot; aria-label=&quot;개발환경 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;개발환경&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Windows 10&lt;br&gt;
+React Native CLI&lt;br&gt;
+React Native 0.61
+Android Device&lt;br&gt;
+Android 10
+Visual Studio Code&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;PC와 안드로이드 device를 USB케이블로 연결한후 작업을 시작한다.
+Wi-fi 디버깅 세팅이 모두 완료되면 USB케이블을 해제한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;안드로이드 디바이스를 USB케이블을 이용하여 PC에 연결한다.&lt;/li&gt;
+&lt;li&gt;VSC의 터미널에서 npx react-native run-android 를 실행하여 app을 디바이스에 띄운다.
+&lt;img src=&quot;../../../images/20200117001_6.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;안드로이드 디바이스를 들고 두세번 정도 좌우로 흔들어 “개발자메뉴”가 나오면 “Settings” 메뉴로 이동한다.
+&lt;img src=&quot;../../../images/20200117001_1.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Debug server host &amp;#x26; port for device 메뉴로 이동한다.
+&lt;img src=&quot;../../../images/20200117001_2.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;device와 연결되어있는 PC IP와 8081포트를 입력한다.
+&lt;img src=&quot;../../../images/20200117001_4.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;입력후 뒤로가기 버튼을 클릭하여 개발자메뉴로 다시 돌아온다.
+뒤로가기 버튼을 클릭하면 개발자메뉴가 사라진다.
+디바이스를 두세번좌우로 흔들어서 다시 개발자 메뉴로 들어온다.&lt;/li&gt;
+&lt;li&gt;Reload 버튼을 클릭하여 새로고침을 한다.
+&lt;img src=&quot;../../../images/20200117001_5.png&quot;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Note&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;만약 Reload버튼시 오류가 발생한다면 PC의 방화벽 정책을 확인해보길 바란다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;커피숍이나 다른 외부에서 WI-IF를 접속하면 공용네트워크로 접속하기 때문에 개인네트워크로 설정해놓은 방화벽정책은 쓸수가 없다.
+그래서 공용을 개인네트워크로 변경을 해주던지 아니면 공용네트워크 방화벽정책을 수정해주면 오류를 잡을 수 있다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[React Native CLI 시작하기 - 1. 개발환경설정]]></title><description><![CDATA[React Native 시작하기 위해서 패키지관리툴, 의존성 패키지설치, 안드로이드 스튜디오 설치등을
+추후 다시 세팅해야될경우를 대비하여 정리해놓는다. 개발환경 Windows 10
+React Native CLI
+React Native 0.6…]]></description><link>https://dryadsoft.github.io/react-native/react-native-cli-시작하기---1.-개발환경설정/</link><guid isPermaLink="false">https://dryadsoft.github.io/react-native/react-native-cli-시작하기---1.-개발환경설정/</guid><pubDate>Sun, 08 Nov 2020 18:12:05 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://facebook.github.io/react-native/docs/getting-started&quot;&gt;React Native&lt;/a&gt; 시작하기 위해서 패키지관리툴, 의존성 패키지설치, 안드로이드 스튜디오 설치등을
+추후 다시 세팅해야될경우를 대비하여 정리해놓는다.&lt;/p&gt;
+&lt;h3 id=&quot;개발환경&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EA%B0%9C%EB%B0%9C%ED%99%98%EA%B2%BD&quot; aria-label=&quot;개발환경 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;개발환경&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Windows 10&lt;br&gt;
+React Native CLI&lt;br&gt;
+React Native 0.61
+Android Device&lt;br&gt;
+Android 10
+Visual Studio Code&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;1-패키지관리툴-chocolately-설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#1-%ED%8C%A8%ED%82%A4%EC%A7%80%EA%B4%80%EB%A6%AC%ED%88%B4-chocolately-%EC%84%A4%EC%B9%98&quot; aria-label=&quot;1 패키지관리툴 chocolately 설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;1. 패키지관리툴 chocolately 설치&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;https://facebook.github.io/react-native/docs/getting-started&quot;&gt;React Native&lt;/a&gt; 에서 추천하는&lt;a href=&quot;https://chocolatey.org/install&quot;&gt;chocolately&lt;/a&gt;을 설치한다.&lt;br&gt;
+PowerShell에서 아래 구문을 실행하면 &lt;a href=&quot;https://chocolatey.org/install&quot;&gt;chocolately&lt;/a&gt;가 다운로드된다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;Set-ExecutionPolicy Bypass -Scope Process -Force&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; iex &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;((&lt;/span&gt;New&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;Object System.Net.WebClient&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;.DownloadString&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&apos;https&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;chocolatey.org&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;install.ps1&apos;&lt;span class=&quot;token punctuation&quot;&gt;))&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;2-의존성-패키지-설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#2-%EC%9D%98%EC%A1%B4%EC%84%B1-%ED%8C%A8%ED%82%A4%EC%A7%80-%EC%84%A4%EC%B9%98&quot; aria-label=&quot;2 의존성 패키지 설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;2. 의존성 패키지 설치&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;이미 설치되어있는 패키지는 제외하고 설치한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;choco &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y nodejs.install python2 jdk8
+또는
+choco &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y nodejs.install
+-&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; nodejs 설치시 위명령어를 사용하지말고 수동으로 &lt;span class=&quot;token number&quot;&gt;10.13&lt;/span&gt;.0버전 다운받아 설치할것&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;
+-&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;12&lt;/span&gt;.x.x 또는 &lt;span class=&quot;token number&quot;&gt;13&lt;/span&gt;.x.x버전 설치시 npx react-native run-android 실행시 오류발생
+choco &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y python2
+choco &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; -y jdk8&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;3-안드로이드-스튜디오-설치&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#3-%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%8A%A4%ED%8A%9C%EB%94%94%EC%98%A4-%EC%84%A4%EC%B9%98&quot; aria-label=&quot;3 안드로이드 스튜디오 설치 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;3. &lt;a href=&quot;https://developer.android.com/studio/index.html&quot;&gt;안드로이드 스튜디오&lt;/a&gt; 설치&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;안드로이드 스튜디오 설치 후 환경변수를 설정한다.
+Sdk가 설치된 각자 경로를 찾아 아래와 같이 등록한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;ANDROID_HOME
+    D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Android&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Sdk
+Path
+    D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Android&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Sdk&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;platform-tools&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;왼쪽아래 윈도우키 위에서 마우스 오른쪽 버튼을 클릭한 후 “시스템”을 선택한다.
+&lt;img src=&quot;../../../images/20200105003_1.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;오른쪽 상단의 “시스템 정보” 를 선택한다.
+&lt;img src=&quot;../../../images/20200105003_2.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;고급 시스템 설정을 선택한다.
+&lt;img src=&quot;../../../images/20200105003_3.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;환경변수를 선택한다.
+&lt;img src=&quot;../../../images/20200105003_4.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;ANDROID&lt;em&gt;HOME 시스템 변수를 신규 생성한다.
+![](../../../images/20200105003&lt;/em&gt;5.png)&lt;/li&gt;
+&lt;li&gt;Path 시스템변수를 더블 클릭한다.
+&lt;img src=&quot;../../../images/20200105003_6.png&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Path 시스템변수에 platform-tools 의 경로를 추가한다.
+&lt;img src=&quot;../../../images/20200105003_7.png&quot;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;5-npx를-사용하여react-native-프로젝트-생성&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#5-npx%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%ACreact-native-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%83%9D%EC%84%B1&quot; aria-label=&quot;5 npx를 사용하여react native 프로젝트 생성 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;5. npx를 사용하여react native 프로젝트 생성&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;기존 react-native-cli 패키지가 설치되어있다면
+삭제 후 npx를 사용하여 프로젝트를 생성한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;npx react-native init 프로젝트명&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;아래 명령어는 React Native 특정버전을 설치하는 구문이다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;npx react-native init 프로젝트명 --version X.XX.X&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;아래 명령어는 React Native 템플릿 지정하여 설치(TypeScript)한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;npx react-native init 프로젝트명 --template react-native-template-typescript&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;visual studio code 에서 프로젝트를 실행한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;npx react-native run-android&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;설치시-발생한-오류-및-해별방법물리device사용&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EC%84%A4%EC%B9%98%EC%8B%9C-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%98%A4%EB%A5%98-%EB%B0%8F-%ED%95%B4%EB%B3%84%EB%B0%A9%EB%B2%95%EB%AC%BC%EB%A6%ACdevice%EC%82%AC%EC%9A%A9&quot; aria-label=&quot;설치시 발생한 오류 및 해별방법물리device사용 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;설치시 발생한 오류 및 해별방법(물리device사용)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;발생오류&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;  adb.exe: error: closed
+  warn Failed to connect to development server using &lt;span class=&quot;token string&quot;&gt;&quot;adb reverse&quot;&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt; Command failed: D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Android&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;Sdk/platform-tools/adb -s 42f6160121e9cffd reverse tcp:8081 tcp:8081&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;발생원인&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;안드로이드 5.0 미만버전을 사용하여 발생함&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;해결방법&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;안드로이드 device를 9.0 버전이 설치된 기기로 바꿔서 실행하니 오류발생안함.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;기타-설치시-오류해결을-위해서-사용하였던-명령어들-모음&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EA%B8%B0%ED%83%80-%EC%84%A4%EC%B9%98%EC%8B%9C-%EC%98%A4%EB%A5%98%ED%95%B4%EA%B2%B0%EC%9D%84-%EC%9C%84%ED%95%B4%EC%84%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EC%98%80%EB%8D%98-%EB%AA%85%EB%A0%B9%EC%96%B4%EB%93%A4-%EB%AA%A8%EC%9D%8C&quot; aria-label=&quot;기타 설치시 오류해결을 위해서 사용하였던 명령어들 모음 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;기타 설치시 오류해결을 위해서 사용하였던 명령어들 모음&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;adb reverse tcp:8081 tcp:8081
+
+adb usb
+adb sideload
+
+  &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; android
+  gradlew clean&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[gulp - javascript를 babel을 이용하여 컴파일하기]]></title><description><![CDATA[목차 gulp - babel을 이용하여 개발 환경설정 gulp - javascript를 babel을 이용하여 컴파일하기 javascript 컴파일 하기 src 폴더에 javascript파일을 생성 후 테스트 코드를 작성 javascript…]]></description><link>https://dryadsoft.github.io/gulp.js/gulp---javascript를-babel을-이용하여-컴파일하기/</link><guid isPermaLink="false">https://dryadsoft.github.io/gulp.js/gulp---javascript를-babel을-이용하여-컴파일하기/</guid><pubDate>Sun, 08 Nov 2020 18:12:01 GMT</pubDate><content:encoded>&lt;h3 id=&quot;목차&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8&quot; aria-label=&quot;목차 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/1&quot;&gt;gulp - babel을 이용하여 개발 환경설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#javascript-%EC%BB%B4%ED%8C%8C-%ED%95%98%EA%B8%B0&quot;&gt;javascript 컴파일 하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#src-%ED%8F%B4%EB%8D%94-*javascript*%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%83%9D%EC%84%B1-%ED%9B%84-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9E%91%EC%84%B1&quot;&gt;src 폴더에 &lt;em&gt;javascript&lt;/em&gt;파일을 생성 후 테스트 코드를 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#javascript%EB%A5%BC-%EC%BB%B4%ED%8C%8C%EC%9D%BC%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%98%EC%97%AC-%ED%95%84%EC%9A%94%ED%95%9C-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98&quot;&gt;javascript를 컴파일하기 위하여 필요한 모듈을 설치&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulpfile.babel.js-%ED%8C%8C%EC%9D%BC%EC%97%90-%EC%95%84%EB%9E%98-%EB%82%B4%EC%9A%A9%EC%9D%84-%EC%9E%91%EC%84%B1&quot;&gt;gulpfile.babel.js 파일에 아래 내용을 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89&quot;&gt;gulp 실행&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0&quot;&gt;node 실행하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2-1. &lt;a href=&quot;../gulp/11&quot;&gt;gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/10&quot;&gt;gulp - node + typescript 컴파일하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;div-idjavascript-컴파-하기javascript-컴파일-하기div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idjavascript-%EC%BB%B4%ED%8C%8C-%ED%95%98%EA%B8%B0javascript-%EC%BB%B4%ED%8C%8C%EC%9D%BC-%ED%95%98%EA%B8%B0div&quot; aria-label=&quot;div idjavascript 컴파 하기javascript 컴파일 하기div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;javascript-컴파-하기&quot;&gt;javascript 컴파일 하기&lt;/div&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;node.js프로젝트의 js파일 한가지만 간단하게 컴파일하는 방법을 알아보자.&lt;br/&gt;
+gulp개발환경 세팅이 아직 안되어 있으면 &lt;a href=&quot;../gulp/1&quot;&gt;이전포스트&lt;/a&gt;를 참고하길 바란다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;div-idsrc-폴더-javascript파일을-생성-후-테스트-코드를-작성src-폴더에-javascript파일을-생성-후-테스트-코드를-작성div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idsrc-%ED%8F%B4%EB%8D%94-javascript%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%83%9D%EC%84%B1-%ED%9B%84-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9E%91%EC%84%B1src-%ED%8F%B4%EB%8D%94%EC%97%90-javascript%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%83%9D%EC%84%B1-%ED%9B%84-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9E%91%EC%84%B1div&quot; aria-label=&quot;div idsrc 폴더 javascript파일을 생성 후 테스트 코드를 작성src 폴더에 javascript파일을 생성 후 테스트 코드를 작성div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;src-폴더-*javascript*파일을-생성-후-테스트-코드를-작성&quot;&gt;src 폴더에 &lt;em&gt;javascript&lt;/em&gt;파일을 생성 후 테스트 코드를 작성&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// src / components / utils.js;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;plus&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;a&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; b&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt; console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;a &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; b&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; plus &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// src / index.js;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; plus &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;./components/utils&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;plus&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idjavascript를-컴파일하기-위하여-필요한-모듈을-설치javascript를-컴파일하기-위하여-필요한-모듈을-설치div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idjavascript%EB%A5%BC-%EC%BB%B4%ED%8C%8C%EC%9D%BC%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%98%EC%97%AC-%ED%95%84%EC%9A%94%ED%95%9C-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98javascript%EB%A5%BC-%EC%BB%B4%ED%8C%8C%EC%9D%BC%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%98%EC%97%AC-%ED%95%84%EC%9A%94%ED%95%9C-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98div&quot; aria-label=&quot;div idjavascript를 컴파일하기 위하여 필요한 모듈을 설치javascript를 컴파일하기 위하여 필요한 모듈을 설치div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;javascript를-컴파일하기-위하여-필요한-모듈을-설치&quot;&gt;javascript를 컴파일하기 위하여 필요한 모듈을 설치&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; gulp-babel -D&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgulpfilebabeljs-파일에-아래-내용을-작성gulpfilebabeljs-파일에-아래-내용을-작성div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgulpfilebabeljs-%ED%8C%8C%EC%9D%BC%EC%97%90-%EC%95%84%EB%9E%98-%EB%82%B4%EC%9A%A9%EC%9D%84-%EC%9E%91%EC%84%B1gulpfilebabeljs-%ED%8C%8C%EC%9D%BC%EC%97%90-%EC%95%84%EB%9E%98-%EB%82%B4%EC%9A%A9%EC%9D%84-%EC%9E%91%EC%84%B1div&quot; aria-label=&quot;div idgulpfilebabeljs 파일에 아래 내용을 작성gulpfilebabeljs 파일에 아래 내용을 작성div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gulpfile.babel.js-파일에-아래-내용을-작성&quot;&gt;gulpfile.babel.js 파일에 아래 내용을 작성&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; gulp &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp&apos;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; babel &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp-babel&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; routes &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  js&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    src&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;src/**/*.js&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 대상 javascript파일&lt;/span&gt;
+    dest&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;build&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// javascript파일이 컴파일되어서 생성되는 폴더&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;js&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+  gulp
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;routes&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;src&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 출발지&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;babel&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// babel을 이용하여 컴파일&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gulp&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;dest&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;routes&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dest&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 목적지&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; dev &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gulp&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;series&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// package.json의 scripts에 작성한 &quot;gulp dev&quot; task&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgulp-실행gulp-실행div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgulp-%EC%8B%A4%ED%96%89gulp-%EC%8B%A4%ED%96%89div&quot; aria-label=&quot;div idgulp 실행gulp 실행div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gulp-실행&quot;&gt;gulp 실행&lt;/div&gt;&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;gulp를 실행하면 아래와같이 정상적으로 실행된걸 확인 할 수 있다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; dev
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; run v1.21.0
+$ gulp dev
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:38:00&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Requiring external module @babel/register
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:38:01&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Using gulpfile D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workspace&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;dryadsoft&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulp&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulp_javascript&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulpfile.babel.js
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:38:01&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starting &lt;span class=&quot;token string&quot;&gt;&apos;dev&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:38:01&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starting &lt;span class=&quot;token string&quot;&gt;&apos;js&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:38:01&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Finished &lt;span class=&quot;token string&quot;&gt;&apos;js&apos;&lt;/span&gt; after &lt;span class=&quot;token number&quot;&gt;67&lt;/span&gt; ms
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:38:01&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Finished &lt;span class=&quot;token string&quot;&gt;&apos;dev&apos;&lt;/span&gt; after &lt;span class=&quot;token number&quot;&gt;75&lt;/span&gt; ms
+Done &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;.69s.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;실행결과 root디렉토리에 build 폴더가 생성된다.&lt;br/&gt;
+생성된build 폴더 안의 구조는 src폴더의 구조와 똑같다.&lt;br/&gt;
+build 폴더 안에 컴파일된 소스를 확인 할 수 있다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;div-idnode-실행하기node-실행하기div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idnode-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0div&quot; aria-label=&quot;div idnode 실행하기node 실행하기div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;node-실행하기&quot;&gt;node 실행하기&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ node build/index.js
+&lt;span class=&quot;token number&quot;&gt;9&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;컴파일된 js파일을 실행하면 위와 같이 정상적으로 실행된 결과값을 확인 할 수 있다.&lt;/p&gt;
+&lt;h3 id=&quot;목차-1&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8-1&quot; aria-label=&quot;목차 1 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/1&quot;&gt;gulp - babel을 이용하여 개발 환경설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#javascript-%EC%BB%B4%ED%8C%8C-%ED%95%98%EA%B8%B0&quot;&gt;javascript 컴파일 하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#src-%ED%8F%B4%EB%8D%94-*javascript*%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%83%9D%EC%84%B1-%ED%9B%84-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%BD%94%EB%93%9C%EB%A5%BC-%EC%9E%91%EC%84%B1&quot;&gt;src 폴더에 &lt;em&gt;javascript&lt;/em&gt;파일을 생성 후 테스트 코드를 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#javascript%EB%A5%BC-%EC%BB%B4%ED%8C%8C%EC%9D%BC%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%98%EC%97%AC-%ED%95%84%EC%9A%94%ED%95%9C-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98&quot;&gt;javascript를 컴파일하기 위하여 필요한 모듈을 설치&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulpfile.babel.js-%ED%8C%8C%EC%9D%BC%EC%97%90-%EC%95%84%EB%9E%98-%EB%82%B4%EC%9A%A9%EC%9D%84-%EC%9E%91%EC%84%B1&quot;&gt;gulpfile.babel.js 파일에 아래 내용을 작성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89&quot;&gt;gulp 실행&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0&quot;&gt;node 실행하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;2-1. &lt;a href=&quot;../gulp/11&quot;&gt;gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/10&quot;&gt;gulp - node + typescript 컴파일하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[React Native apk사이즈 줄이기]]></title><description><![CDATA[React Native 시작하기 1. build.gradle 수정하기 변경전 변경후 2. Hermes 사용하기 필수 설치 패키지
+Microsoft Visual C++ 2015 Redistributable android/app/build.gradle…]]></description><link>https://dryadsoft.github.io/react-native/react-native-apk사이즈-줄이기/</link><guid isPermaLink="false">https://dryadsoft.github.io/react-native/react-native-apk사이즈-줄이기/</guid><pubDate>Sun, 08 Nov 2020 18:11:38 GMT</pubDate><content:encoded>&lt;p&gt;&lt;a href=&quot;https://facebook.github.io/react-native/docs/getting-started&quot;&gt;React Native 시작하기&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;1-buildgradle-수정하기&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#1-buildgradle-%EC%88%98%EC%A0%95%ED%95%98%EA%B8%B0&quot; aria-label=&quot;1 buildgradle 수정하기 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;1. build.gradle 수정하기&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;변경전&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;def enableSeparateBuildPerCPUArchitecture &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;
+def enableProguardInReleaseBuilds &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;변경후&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;def enableSeparateBuildPerCPUArchitecture &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;
+def enableProguardInReleaseBuilds &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;2-hermes-사용하기&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#2-hermes-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0&quot; aria-label=&quot;2 hermes 사용하기 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;2. Hermes 사용하기&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;ol&gt;
+&lt;li&gt;필수 설치 패키지
+&lt;a href=&quot;https://www.microsoft.com/en-us/download/details.aspx?id=48145&quot;&gt;Microsoft Visual C++ 2015 Redistributable&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;ol start=&quot;2&quot;&gt;
+&lt;li&gt;android/app/build.gradle 파일 수정&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;  project.ext.react &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+      entryFile: &lt;span class=&quot;token string&quot;&gt;&quot;index.js&quot;&lt;/span&gt;,
+-     enableHermes: &lt;span class=&quot;token boolean&quot;&gt;false&lt;/span&gt;  // clean and rebuild &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; changing
++     enableHermes: &lt;span class=&quot;token boolean&quot;&gt;true&lt;/span&gt;  // clean and rebuild &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; changing
+  &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;만약 ProGuard를 사용한다면 proguard-rules.pro 파일에 아래 문구 추가&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;-keep class com.facebook.hermes.unicode.** &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; *&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;모두 설정되었으면 기존 빌드된 내용은 삭제한다.(Window에서 명령어)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; android &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; gradlew clean&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;앱 실행&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;npx react-native run-android&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기]]></title><description><![CDATA[목차 gulp - babel을 이용하여 개발 환경설정 gulp - javascript를 babel을 이용하여 컴파일하기 2-1. gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기 필요한 node…]]></description><link>https://dryadsoft.github.io/gulp.js/gulp---uglify를-이용하여-babel로-컴파일된-javascript-파일-축소하기/</link><guid isPermaLink="false">https://dryadsoft.github.io/gulp.js/gulp---uglify를-이용하여-babel로-컴파일된-javascript-파일-축소하기/</guid><pubDate>Sun, 08 Nov 2020 18:11:16 GMT</pubDate><content:encoded>&lt;h3 id=&quot;목차&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8&quot; aria-label=&quot;목차 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/1&quot;&gt;gulp - babel을 이용하여 개발 환경설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;../gulp/9&quot;&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2-1. gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%ED%95%84%EC%9A%94%ED%95%9C-node-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98%ED%95%9C%EB%8B%A4.&quot;&gt;필요한 node 모듈을 설치한다.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulpfile.babel.js-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%88%98%EC%A0%95%ED%95%9C%EB%8B%A4.&quot;&gt;gulpfile.babel.js 파일을 수정한다.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89&quot;&gt;gulp 실행&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%90%9C-%EC%86%8C%EC%8A%A4-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0&quot;&gt;컴파일된 소스 확인하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0&quot;&gt;node 실행하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/10&quot;&gt;gulp - node + typescript 컴파일하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;node 프로젝트를 babel로 컴파일 후 파일 사이즈를 줄이기 위하여 &lt;strong&gt;gulp-uglify&lt;/strong&gt; 를 이용하여 축소 할 수 있다.
+이전 node 프로젝트의 연속포스트 이기때문에 앞부분을 보지 못했다면 먼저 보고 오길 추천한다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&quot;../gulp/9&quot;&gt;이전포스트로 이동&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&quot;div-id필요한-node-모듈을-설치한다필요한-node-모듈을-설치한다div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-id%ED%95%84%EC%9A%94%ED%95%9C-node-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98%ED%95%9C%EB%8B%A4%ED%95%84%EC%9A%94%ED%95%9C-node-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98%ED%95%9C%EB%8B%A4div&quot; aria-label=&quot;div id필요한 node 모듈을 설치한다필요한 node 모듈을 설치한다div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;필요한-node-모듈을-설치한다.&quot;&gt;필요한 node 모듈을 설치한다.&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; gulp-uglify -D&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgulpfilebabeljs-파일을-수정한다gulpfilebabeljs-파일을-수정한다div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgulpfilebabeljs-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%88%98%EC%A0%95%ED%95%9C%EB%8B%A4gulpfilebabeljs-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%88%98%EC%A0%95%ED%95%9C%EB%8B%A4div&quot; aria-label=&quot;div idgulpfilebabeljs 파일을 수정한다gulpfilebabeljs 파일을 수정한다div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gulpfile.babel.js-파일을-수정한다.&quot;&gt;gulpfile.babel.js 파일을 수정한다.&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; gulp &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp&apos;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; babel &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp-babel&apos;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; GulpUglify &lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;gulp-uglify&apos;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// ------&gt; uglify 추가&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; routes &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  js&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    src&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;src/**/*.js&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 대상 javascript파일&lt;/span&gt;
+    dest&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;build&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// javascript파일이 컴파일되어서 생성되는 폴더&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;js&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&gt;&lt;/span&gt;
+  gulp
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;routes&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;src&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 출발지&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;babel&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// babel을 이용하여 컴파일&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;GulpUglify&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// ------&gt; uglify 추가&lt;/span&gt;
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;gulp&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;dest&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;routes&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;dest&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// 목적지&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;const&lt;/span&gt; dev &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; gulp&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;series&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;js&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// package.json의 scripts에 작성한 &quot;gulp dev&quot; task&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgulp-실행gulp-실행div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgulp-%EC%8B%A4%ED%96%89gulp-%EC%8B%A4%ED%96%89div&quot; aria-label=&quot;div idgulp 실행gulp 실행div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gulp-실행&quot;&gt;gulp 실행&lt;/div&gt;&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;gulp를 실행하면 아래와같이 정상적으로 실행된걸 확인 할 수 있다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; dev
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; run v1.21.0
+$ gulp dev
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:14:43&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Requiring external module @babel/register
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:14:44&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Using gulpfile D:&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;workspace&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;dryadsoft&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulp&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulp_javascript&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;gulpfile.babel.js
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:14:44&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starting &lt;span class=&quot;token string&quot;&gt;&apos;dev&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:14:44&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Starting &lt;span class=&quot;token string&quot;&gt;&apos;js&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:14:45&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Finished &lt;span class=&quot;token string&quot;&gt;&apos;js&apos;&lt;/span&gt; after &lt;span class=&quot;token number&quot;&gt;104&lt;/span&gt; ms
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;07:14:45&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; Finished &lt;span class=&quot;token string&quot;&gt;&apos;dev&apos;&lt;/span&gt; after &lt;span class=&quot;token number&quot;&gt;110&lt;/span&gt; ms
+Done &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;.85s.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;실행결과 root디렉토리에 build 폴더가 생성된다.&lt;br/&gt;
+생성된build 폴더 안의 구조는 src폴더의 구조와 똑같다.&lt;br/&gt;
+build 폴더 안에 컴파일된 소스를 확인 할 수 있다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;div-id컴파일된-소스-확인하기컴파일된-소스-확인하기div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-id%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%90%9C-%EC%86%8C%EC%8A%A4-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%90%9C-%EC%86%8C%EC%8A%A4-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0div&quot; aria-label=&quot;div id컴파일된 소스 확인하기컴파일된 소스 확인하기div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;컴파일된-소스-확인하기&quot;&gt;컴파일된 소스 확인하기&lt;/div&gt;&lt;/h2&gt;
+&lt;p&gt;build폴더를 확인하면 아래와 같이 소스가 축소 되어 있는 걸 확인 할 수 있다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;javascript&quot;&gt;&lt;pre class=&quot;language-javascript&quot;&gt;&lt;code class=&quot;language-javascript&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;// build/index.js&lt;/span&gt;
+&lt;span class=&quot;token string&quot;&gt;&apos;use strict&apos;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; _utils &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;./components/utils&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; _utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;plus&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// build/components/utils.js&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;use strict&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+Object&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;defineProperty&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exports&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;__esModule&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt; value&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exports&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;plus &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;token function-variable function&quot;&gt;plus&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token parameter&quot;&gt;e&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; s&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; console&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;e &lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt; s&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+exports&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;plus &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; plus&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idnode-실행하기node-실행하기div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idnode-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0div&quot; aria-label=&quot;div idnode 실행하기node 실행하기div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;node-실행하기&quot;&gt;node 실행하기&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;$ node build/index.js
+&lt;span class=&quot;token number&quot;&gt;9&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;컴파일된 js파일을 실행하면 위와 같이 정상적으로 실행된 결과값을 확인 할 수 있다.&lt;/p&gt;
+&lt;h3 id=&quot;목차-1&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8-1&quot; aria-label=&quot;목차 1 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/1&quot;&gt;gulp - babel을 이용하여 개발 환경설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;../gulp/9&quot;&gt;gulp - javascript를 babel을 이용하여 컴파일하기&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;2-1. gulp - uglify를 이용하여 babel로 컴파일된 javascript 파일 축소하기&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#%ED%95%84%EC%9A%94%ED%95%9C-node-%EB%AA%A8%EB%93%88%EC%9D%84-%EC%84%A4%EC%B9%98%ED%95%9C%EB%8B%A4.&quot;&gt;필요한 node 모듈을 설치한다.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulpfile.babel.js-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%88%98%EC%A0%95%ED%95%9C%EB%8B%A4.&quot;&gt;gulpfile.babel.js 파일을 수정한다.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#gulp-%EC%8B%A4%ED%96%89&quot;&gt;gulp 실행&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#%EC%BB%B4%ED%8C%8C%EC%9D%BC%EB%90%9C-%EC%86%8C%EC%8A%A4-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0&quot;&gt;컴파일된 소스 확인하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#node-%EC%8B%A4%ED%96%89%ED%95%98%EA%B8%B0&quot;&gt;node 실행하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;../gulp/10&quot;&gt;gulp - node + typescript 컴파일하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</content:encoded></item><item><title><![CDATA[git 오류 해결방법]]></title><description><![CDATA[오류 발생 상황 ( package.json의 yarn deploy 실행 ) 발생오류 => A branch named ‘gh-pages’ already exists. 원인 Gthub의 기존 repositoroy…]]></description><link>https://dryadsoft.github.io/git/git-오류-해결방법/</link><guid isPermaLink="false">https://dryadsoft.github.io/git/git-오류-해결방법/</guid><pubDate>Wed, 04 Nov 2020 06:12:34 GMT</pubDate><content:encoded>&lt;h3 id=&quot;오류-발생-상황--packagejson의-yarn-deploy-실행-&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EC%98%A4%EB%A5%98-%EB%B0%9C%EC%83%9D-%EC%83%81%ED%99%A9--packagejson%EC%9D%98-yarn-deploy-%EC%8B%A4%ED%96%89-&quot; aria-label=&quot;오류 발생 상황  packagejson의 yarn deploy 실행  permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;오류 발생 상황 ( package.json의 yarn deploy 실행 )&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json&quot;&gt;&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;package.json
+&lt;span class=&quot;token property&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    ...
+    &lt;span class=&quot;token property&quot;&gt;&quot;predeploy&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;yarn build&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;deploy&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;gh-pages -d build&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; deploy&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;발생오류--a-branch-named-gh-pages-already-exists&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%B0%9C%EC%83%9D%EC%98%A4%EB%A5%98--a-branch-named-gh-pages-already-exists&quot; aria-label=&quot;발생오류  a branch named gh pages already exists permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;발생오류 =&gt; A branch named ‘gh-pages’ already exists.&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shellwrap&quot;&gt;&lt;pre class=&quot;language-shellwrap&quot;&gt;&lt;code class=&quot;language-shellwrap&quot;&gt;ProcessError: fatal: A branch named &amp;#39;gh-pages&amp;#39; already exists.
+
+    at ChildProcess.&amp;lt;anonymous&amp;gt; (D:\workspace\reactJs\minsblog\node_modules\gh-pages\lib\git.js:42:16)
+    at ChildProcess.emit (events.js:210:5)
+    at maybeClose (internal/child_process.js:1021:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:283:5) {
+  code: 128,
+  message: &amp;quot;fatal: A branch named &amp;#39;gh-pages&amp;#39; already exists.\n&amp;quot;,
+  name: &amp;#39;ProcessError&amp;#39;
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;원인&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EC%9B%90%EC%9D%B8&quot; aria-label=&quot;원인 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;원인&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Gthub의 기존 repositoroy를 삭제 및 생성을 몇번하면서 프로젝트의 branch cache가 남아있어서 발생한 문제&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;해결방법&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%ED%95%B4%EA%B2%B0%EB%B0%A9%EB%B2%95&quot; aria-label=&quot;해결방법 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;해결방법&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;rm&lt;/span&gt; -rf node_modules/gh-pages/.cache&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[github 멀티계정 변경하기 - ssh key]]></title><description><![CDATA[목차 1. SSH KEY 생성 2. Gitbub에 ssh public key 등록 3. ssh config 파일 설정 4. ssh 명령어 모음 5. ssh key 설정중 발생한 오류 Github의 여러계정 등록하기 github…]]></description><link>https://dryadsoft.github.io/git/github-멀티계정-변경하기---ssh-key/</link><guid isPermaLink="false">https://dryadsoft.github.io/git/github-멀티계정-변경하기---ssh-key/</guid><pubDate>Wed, 04 Nov 2020 06:12:27 GMT</pubDate><content:encoded>&lt;h3 id=&quot;목차&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%AA%A9%EC%B0%A8&quot; aria-label=&quot;목차 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;목차&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;#ssh-key-%EC%83%9D%EC%84%B1&quot;&gt;1. SSH KEY 생성&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#gitbub%EC%97%90-ssh-public-key-%EB%93%B1%EB%A1%9D&quot;&gt;2. Gitbub에 ssh public key 등록&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#ssh-config-%ED%8C%8C%EC%9D%BC-%EC%84%A4%EC%A0%95&quot;&gt;3. ssh config 파일 설정&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#ssh-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%A8%EC%9D%8C&quot;&gt;4. ssh 명령어 모음&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#ssh-key-%EC%84%A4%EC%A0%95%EC%A4%91-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%98%A4%EB%A5%98&quot;&gt;5. ssh key 설정중 발생한 오류&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;github의-여러계정-등록하기&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#github%EC%9D%98-%EC%97%AC%EB%9F%AC%EA%B3%84%EC%A0%95-%EB%93%B1%EB%A1%9D%ED%95%98%EA%B8%B0&quot; aria-label=&quot;github의 여러계정 등록하기 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Github의 여러계정 등록하기&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;github를 사용하다보면 프로젝트마다 다른 계정을 사용해야 하는 경우가 발생한다.
+이럴때 마다 앞의 &lt;a href=&quot;https://dryadsoft.github.io/#/posts/git/6&quot;&gt;포스트&lt;/a&gt;에 작성했던 방법으로 계정을 변경하면 매우 귀찮다.
+그리고 설정이 제대로 되어있지 않으면 &lt;strong&gt;permission denied&lt;/strong&gt; 오류가 발생하는 경우가 생긴다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;div-idssh-key-생성ssh-key-생성div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idssh-key-%EC%83%9D%EC%84%B1ssh-key-%EC%83%9D%EC%84%B1div&quot; aria-label=&quot;div idssh key 생성ssh key 생성div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;ssh-key-생성&quot;&gt;SSH KEY 생성&lt;/div&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent&quot;&gt;GitHub Help&lt;/a&gt; 페이지에 나와있는 설명대로 &lt;strong&gt;SSH&lt;/strong&gt; KEY를 생성한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;git bash를 연다.&lt;/li&gt;
+&lt;li&gt;ssh key를 생성할 github의 이메일 계정을 입력 후 아래 명령어를 실행한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-keygen -t rsa -b &lt;span class=&quot;token number&quot;&gt;4096&lt;/span&gt; -C &lt;span class=&quot;token string&quot;&gt;&quot;your_email@example.com&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;3&quot;&gt;
+&lt;li&gt;git bash에 아래 문구가 나오면 key가 생성될 위치를 지정해준다.&lt;/li&gt;
+&lt;li&gt;지정하지 않고 엔터키를 누르면 기본경로에 저장 된다.&lt;/li&gt;
+&lt;li&gt;여러계정을 등록할 경우 같은경로에 같은이름으로 등록되면 안되기때문에 경로를 변경해준다.&lt;/li&gt;
+&lt;li&gt;경로변경시 해당 경로는 반드시 존재하여야한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;&amp;gt; Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;4&quot;&gt;
+&lt;li&gt;ssh-add 명령어로 key를 등록한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-add ~/.ssh/id_rsa   &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;생성된 id_rsa 키&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;5&quot;&gt;
+&lt;li&gt;위 방법으로 하면 Windows 10 에서 아래 오류가 발생한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; Could not &lt;span class=&quot;token function&quot;&gt;open&lt;/span&gt; a connection to your authentication agent.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;아래 명령어로 ssh-agent를 background로 실행시키고 다시 ssh-add명령어를 사용하면 오류가 발생하지 않는다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;ssh-agent -s&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+    Agent pid &lt;span class=&quot;token number&quot;&gt;2144&lt;/span&gt;
+    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-add ~/.ssh/id_rsa   &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;생성된 id_rsa 키&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol start=&quot;6&quot;&gt;
+&lt;li&gt;ssh-add가 정상적으로 등록되었는지 조회한다..&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-add -l
+    &lt;span class=&quot;token number&quot;&gt;4096&lt;/span&gt; SHA256:aCB&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;.UT your@email.com &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;RSA&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idgitbub에-ssh-public-key-등록gitbub에-ssh-public-key-등록div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idgitbub%EC%97%90-ssh-public-key-%EB%93%B1%EB%A1%9Dgitbub%EC%97%90-ssh-public-key-%EB%93%B1%EB%A1%9Ddiv&quot; aria-label=&quot;div idgitbub에 ssh public key 등록gitbub에 ssh public key 등록div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;gitbub에-ssh-public-key-등록&quot;&gt;Gitbub에 ssh public key 등록&lt;/div&gt;&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;가지고 있는 Github의 계정마다 아래의 방법대로 반복을 하면된다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/login&quot;&gt;Github&lt;/a&gt;에 로그인한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 404px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 140%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAcCAIAAADuuAg3AAAACXBIWXMAAAsSAAALEgHS3X78AAACwklEQVQ4y41UOW8TQRTmfyEhIVGASBCIDkXpSGTS0FBCxy+gQCgUKaCAOpIpko5DsSIKpAi5SeL42GN2veccO7MH38x6HW9khzw92fNm3/eO783MrWyZCCGKoiCE2LaNBcylbrdWIR3H2d3d3dvbm0wmq/DLwVVVnZycdLvd/f394+NjmJzzG4HnMhgM+v3+qpqXgI2nhOCvLMtrGl4CRnkXw+FkNPb96WRsObYN82I0HI9GlLI66FUwwnOjkDCMgiCgjCW1pCk0jmPENd9FC1zbKLJaISi+KMu8kazJr8HczCaKotFobNk2IZ7n+xZWjoOaXZdciaqUqtPPMiMeYywIwiiKUWiSUCygqD+OE5UXeaOowYDFJRhMFNeVXeYFmNcKvAYv9gx77lpPaFEMHTOFAedsXjZoxGfP907PzgaDIYitQ8w6zMtzJxuS7ALqiiDVnLXKRjCpFDPTAJkqV4vKM2lUsQym3mr3rDQpdV9zdgpTf72fN10bsMraPeeyUImkqWKN0lDGkUywmG8mimaFbGWmnIGLD+dfbv/YWOt1Hhxt3z/aWu/tPP/z5tnvV2u9FzCx+bDXufNz893pp6qouOAL4Kr62P96t7vx5LDz6GB7/WDr8WHn5a+3299fPz3cgYlN7Nz7tvn+72dkugQLQ9KM3flvWaFRJKnKBTWfWsfTTEswxuvTMruTUslMghklhcyMSn19jIhFwjQY7pgwTnIYhI5L8Az5QeQE3A3YNOJeyLBIKNyyFrjOjHw4zBPLxk12CbEsaxrEls9GhLo+tTw6JmmU8sa5fZ+F5kDi9OiK9dHQi1xmhcrwq1U1jkKseIYyMQ9nzKt60wfwv9ICg4x6CEo25mxxKcvBKBPcBDGfhnzs0jjlYMvyWEq55xGXeGCRuJ5YlTmlguLscBGnAlPHYJJUm6l+A6kWeCz4/wOogjC2tKLr0QAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200118001 1&quot;
+        title=&quot;20200118001 1&quot;
+        src=&quot;/static/5f1ae8b47355d1bfd42b6fc62663c04a/494f9/20200118001_1.png&quot;
+        srcset=&quot;/static/5f1ae8b47355d1bfd42b6fc62663c04a/5a46d/20200118001_1.png 300w,
+/static/5f1ae8b47355d1bfd42b6fc62663c04a/494f9/20200118001_1.png 404w&quot;
+        sizes=&quot;(max-width: 404px) 100vw, 404px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;로그인 후 오른쪽 위 메뉴를 클릭하여 Settings를 선택한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 361px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 125.33333333333334%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAIAAAC+dZmEAAAACXBIWXMAAAsSAAALEgHS3X78AAAEOElEQVQ4y42Ta08cVRjH91toTE1tS6DAAkKpiCu7wnLpFgoSgURNqYmJH8D3vvNLqEmTlmK4vjBlN9YLVNsK4W4ircAuZS+zMzv3OTNzzsyZm8/uAm1Majz55+SZPfM7z7P/55lQTX3z/9T5moaLdeELtY21jW83tLRfutwUgug/BG+8Vdt4oTZ87mLd+Mc32zujbR1d0e7oV5+P19W3hN44X/Mqvf7mpbpw69XOaPu7XW3vRLr7rsfiAz39Q7Hu+Bef3bocbg1Nz8yf6fvZhTPNzC/evnNvY3NbUzWGKZZ4QZLlra3tZDKVzhz5QbDy2++h4NXL8zzHcRFCPM+rmua47tLS0uTkZCqVglPquCFCLIiWV9YSiU/6r30U77sR7xuJD4wOjtxquxq7OzUFp9imgQ/JYPOr91JKoZIQXA8PM7NLzc298d7h96L93d3AjyUGP21uj03PLbiytPPTj5phQvGKqgIPCMC8IJ7A8wupltbo4NBEf2K8p3ewd2Dk+tBYJDa0uHgfTh1TdyuA4zheZVGH8qJ0Bicbwx2DN0aHRyZ6+4AcHfxwLBK5Njc3Xy7bsuzK8iurfJ3jvMg8O5+sb4jEYj0f9A13dsUHEon+4Ymmttjde9NwynElQRTB8DMvXdd9Ad9PrTS29LRceT/c2nm5qa35SqS1o+e1czXffPsdnEKTVFVDmg4BJqQKi2BYJfI0AzNFPpdnszkmX+CyeTZXYNOZrCjK0A6EdAW80jRZVjDG1eTIMMswmGAhK5DtAHuBDT97gRkEhu9pjmPYyNBFURIlieU4yyr3tdK0AGlGBfY9LOgA/Lm+sfpgWc8J6e09PsM+39lXOJHYkBlB0YSQM8MCz0cyCsEDdV1bwZQxdr+e2r2zwGdLRzv7pTRzuPlUZkWTYChZkmSwPDjJewqbxDYsm6qWmZWyXybFh2mNlQp7GW4/n9k5KDECJliWZUEQbUpfGt0KjC2KqWNJOJBsH1FfJr6APcHweJMWEVEMx3XAJKgcHK5OaHmBx0oVtijBNpJMTcZIAplIxrpCZB4h1YB5gPEAEnYwDFpbxZFulGFiU1G3i5rLGy6PAwEH1b2IXFUniigyDFNiObZYBFEwvJJZAbdNi8JfLmlQY8BofrYoPi8Ix0URgmeZAi+p2PN0m/7ra3U9vyTrJzCvUQYFOdU7zLJ76fxeOndwXHxaEPIrj9GDn8VfH3qbW876RkWb7vomebxaEtQTmNOoSgLD9g+y3LNMHq746++jnePi8e0p6Zfl3B9r7Oqal864h2n3IO1lc/iHJJcvncCsanO6J5k+q1gQl5DDKVZWscXdPW15RX70RH30xN3ePdWOvbUrSKdu6wQqt0GCDuZRAVHJcFiFqKYlY8woqkSwVxmuM2lVt7HtgO+GYRLLhipgN2EySDmGT0JToccGfFKKor0kFenmP3iQjYde8Z2eAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200118001 2&quot;
+        title=&quot;20200118001 2&quot;
+        src=&quot;/static/972df9effdb38f4428a5787581143bf6/39d76/20200118001_2.png&quot;
+        srcset=&quot;/static/972df9effdb38f4428a5787581143bf6/5a46d/20200118001_2.png 300w,
+/static/972df9effdb38f4428a5787581143bf6/39d76/20200118001_2.png 361w&quot;
+        sizes=&quot;(max-width: 361px) 100vw, 361px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;SSH and GPG keys를 선택한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 336px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 177.99999999999997%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAkCAIAAAAGkY33AAAACXBIWXMAAAsSAAALEgHS3X78AAACsUlEQVRIx5VV23LaMBDN/39LH3qZdJoEkkKmnb63k0lJgIABx3ckX1Z3dyVDCjbtGM1BI2Stz+5qz/pCay2kUtogpNJ2YeyCC9kCnqyPx4U2ZrUOfk9mz3PvZbmePC8mT/OVH+UlowW8geSAHG1jKQQheZySJKNRnAZRuvHDKM7Kihcle0NegOwaqzze+os0y8Iwrv89jMG4dNc4zTYvnrdcLDwMAYd2aA0M+JSx4FrJ5t1Cda3+a4xWCRGLAOavEFN5ptt4TXbX1Ac+d6FOMxud5NIL+TJiaWnzafozIy2WBBOKCa2Uac71jRn3aSVjIpJcBDhTYRx5C/okMxrnIEMiYiqCrXjNuO7PjLsg0G0778Lrz4wJSws59wETZlzA51yV1s1VucfnXlWtMVuPHkx9mL4yL2JMmt7M0nI3JYKaRZzkt8xdVeEvpPIl4CH9+6xLjTuqk44L+fMXefcx+XQTf7iSNwM1GMqBncX1gF/tcT1kl1/46L5tzIZ35XJDS1lQIFuIk3K7hSStBPCaC7MHxgPXw7osj4z57V26DHyqQ1ch64TjYh5AydRhpWKuYHBn2sbff+TvL2H0DW5H/OuYj8ZiNNbje5zt3wajMToIn69qpdp69sPycU4eZmTlF5MlDeOqFsIIUR/AcK6kPKXn4zTaYuxAnS7PWgcZf/ZhHbIFIuJSmTPKE1tXxVDPiksrD9O/PPFRASqyekZhSlzkoM7oJMD1JuUoadRzQiUFVfeUpPtWaVcFTtUcz/RvvbYBihkmLOZPPjxtgILuy7zX81F4/Zu+jgh/WFbY9KcbmAXn6NnJWFVM4swdhELluuHYGsiOgztjt7tDc692cWDZQHf1jEexV3uxwIStUFLEfT1iTirdx20sL4kJz3Lb8VHYpBCYhYIp59Nu7D9pR+MPpSU24kW+VRMAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200118001 3&quot;
+        title=&quot;20200118001 3&quot;
+        src=&quot;/static/14e96d3110246f8abc0807f52a9e8d3a/d99f2/20200118001_3.png&quot;
+        srcset=&quot;/static/14e96d3110246f8abc0807f52a9e8d3a/5a46d/20200118001_3.png 300w,
+/static/14e96d3110246f8abc0807f52a9e8d3a/d99f2/20200118001_3.png 336w&quot;
+        sizes=&quot;(max-width: 336px) 100vw, 336px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;NeW SSH key를 선택한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1015px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.66666666666667%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsSAAALEgHS3X78AAABAUlEQVQoz52RPU/EMAyG8/83NhZmfgE7G2I5GBFCJyEQnE53tPmwE8d2i9OKCokuxfIWvX4exw4xf3U+JsyVqbIPPsY4DONqDdPDx9Pu6vbifnfjIlAAYhYWZZEQQt/bLLBO0Jqoig7Wywg4H59fH4+HvcOihXQZXJlrJUCKyJArmlipmdT6r46DLAF4mEpVvaGbtq5rj23AG3xevlzfnR6MzCnLEp60bW8I0czR5E27hX5hi9A7HPoaHZDGrLOzhYkokwkLZIYimKXyukXTjt6bKiLM8HFLuYTlHOxGMpO3haFol2RmbibbbidvZ9bxH+RMEvHnt7eSkaRL7Vq6PfwNNSbA+JWtmfQAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200118001 4&quot;
+        title=&quot;20200118001 4&quot;
+        src=&quot;/static/570ef01417381930ae558f01c6dc9b39/e088a/20200118001_4.png&quot;
+        srcset=&quot;/static/570ef01417381930ae558f01c6dc9b39/5a46d/20200118001_4.png 300w,
+/static/570ef01417381930ae558f01c6dc9b39/0a47e/20200118001_4.png 600w,
+/static/570ef01417381930ae558f01c6dc9b39/e088a/20200118001_4.png 1015w&quot;
+        sizes=&quot;(max-width: 1015px) 100vw, 1015px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;“Title” 과 “Key”를 입력후 “Add SSH key”버튼을 누른다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1005px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.333333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsSAAALEgHS3X78AAABVElEQVQoz5WSS1PCQAzH+/0PXr169OLBq453Rw7iMAgICBQsj5ZC2+0+stnEdEAPjjiS+c1Okp3kn31EZVVn232ptLbgAPeGdpoqrfOiBO/5T4uUhtpAQAzE6FwRJzbN3SY1643PMszzI9ucEIn5wLG4tii1hwCVqp9fYDxxwzGM3mU9In63R1nGiOwcAzSr91FtUBkkMWZvTNHpmvnCzGL9zfTL+UhMshTEceuNNG2UaxcOwwRjrGSZJeGIf2AxNHkBAzCbaRypyqrSyCTkAavKJkuQPQcA/iSyG8hMZtH+qbUbvKnhEJPEv/ZolTaHJwLikwQ6KpfTRTZbyRloX0A8b99dtx5vs34H061brmC1/gXJb1LbH0QKaGcO98Vg9c3D5dX9xXzUlpCcbS72FIjyzn4r3wEDE4VAfI5F2jZPxY02BYEF/mePSCpFudIosucqfwLhArQgKA72nQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200118001 5&quot;
+        title=&quot;20200118001 5&quot;
+        src=&quot;/static/df5c6ae0987fd22540bf79a551fec9ba/18c13/20200118001_5.png&quot;
+        srcset=&quot;/static/df5c6ae0987fd22540bf79a551fec9ba/5a46d/20200118001_5.png 300w,
+/static/df5c6ae0987fd22540bf79a551fec9ba/0a47e/20200118001_5.png 600w,
+/static/df5c6ae0987fd22540bf79a551fec9ba/18c13/20200118001_5.png 1005w&quot;
+        sizes=&quot;(max-width: 1005px) 100vw, 1005px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;아래와같이 SSH key가 정상적으로 등록된다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 998px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.66666666666667%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAIAAADtbgqsAAAACXBIWXMAAAsSAAALEgHS3X78AAABgUlEQVQoz5VSTUscQRTs//8TDOxBjwkmYA4JGAjkIERxN15ERUejZnZ2Zvrr9ffr12PvZi+BNWBRp9ddXfWKZkqbkUttnIsYEipjJACVMu1CmdZzlWCveX/UfmfKROtTrigFE8IwWMHJ+aB01Jqcy8YmAMu54dxJYbkIoLnqNIzMhhxx60MA8a65PZ9/3j94WPzqrq5ufp4283l7eZm6FfZ97ntc9TSO08DLc8u0Q/DVdR2UNPhudXF9/W42+/Dp45dvxydnZ6eLxU3TlH8XCTkHLphx6ONWnK3Fh9+pbe39I9w/hj/LSapJqDKI+NTm5ZKW3V9OPS/dqjpnG2hdRilElEJMIaRaXl0noLfWu+B9nWHJNFFlyRl7P6iomZZKgw0hVH1tTSoplfp/2yLp2d3h1/YHA+O58jGmelTFACAljNJwaUSlMtbHTa4dbzFlszB1523sqk9ICUvKW2YqOyNUMvAoDdLmRnkl7Wtg1iO4vBEWojeKzdo51a9CG7xJ/AKfWLOQzgcb4wAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200118001 6&quot;
+        title=&quot;20200118001 6&quot;
+        src=&quot;/static/62c388efa5bf7e47f272818c526b0314/350de/20200118001_6.png&quot;
+        srcset=&quot;/static/62c388efa5bf7e47f272818c526b0314/5a46d/20200118001_6.png 300w,
+/static/62c388efa5bf7e47f272818c526b0314/0a47e/20200118001_6.png 600w,
+/static/62c388efa5bf7e47f272818c526b0314/350de/20200118001_6.png 998w&quot;
+        sizes=&quot;(max-width: 998px) 100vw, 998px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;div-idssh-config-파일-설정ssh-config-파일-설정div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idssh-config-%ED%8C%8C%EC%9D%BC-%EC%84%A4%EC%A0%95ssh-config-%ED%8C%8C%EC%9D%BC-%EC%84%A4%EC%A0%95div&quot; aria-label=&quot;div idssh config 파일 설정ssh config 파일 설정div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;ssh-config-파일-설정&quot;&gt;ssh config 파일 설정&lt;/div&gt;&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;C:\Users\사용자계정.ssh폴더에 config 파일을 편집기로 연다.(파일이 존재하지 않으면 새로 만들어준다.)&lt;/li&gt;
+&lt;li&gt;config 파일을 작성한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    Host &lt;span class=&quot;token builtin class-name&quot;&gt;test&lt;/span&gt;                   &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;ssh 명령어에서 사용할 단어&quot;&lt;/span&gt;
+    HostName github.com         &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;github 도메인&quot;&lt;/span&gt;
+    User github_id              &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;github 사용자 아이디&quot;&lt;/span&gt;
+    IdentityFile ~/.ssh/id_rsa  &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;생성된 개인키 경로&quot;&lt;/span&gt;
+
+    또는
+
+    Host &lt;span class=&quot;token builtin class-name&quot;&gt;test&lt;/span&gt;                   &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;ssh 명령어에서 사용할 단어&quot;&lt;/span&gt;
+    User github_id              &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;github 사용자 아이디&quot;&lt;/span&gt;
+    Hostname ssh.github.com     &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;github 도메인&quot;&lt;/span&gt;
+    PreferredAuthentications publickey  &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; 인증키
+    IdentityFile ~/.ssh/id_rsa   &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;생성된 개인키 경로&quot;&lt;/span&gt;
+    Port &lt;span class=&quot;token number&quot;&gt;443&lt;/span&gt;                    &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; 포트&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;    &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; -T git@test
+    Hi &lt;span class=&quot;token string&quot;&gt;&quot;your User&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;!&lt;/span&gt; You&apos;ve successfully authenticated, but GitHub does not provide shell access.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idssh-명령어-모음ssh-명령어-모음div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idssh-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%A8%EC%9D%8Cssh-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%AA%A8%EC%9D%8Cdiv&quot; aria-label=&quot;div idssh 명령어 모음ssh 명령어 모음div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;ssh-명령어-모음&quot;&gt;ssh 명령어 모음&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;ssh-agent -s&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;  &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-agent background실행
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-add ~/.ssh/id_rsa &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; 개인키 추가
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; ssh-add -l            &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; 추가 조회
+&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; -T git@&lt;span class=&quot;token string&quot;&gt;&quot;config파일의 Host&quot;&lt;/span&gt;    &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; 접속 테스트&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;div-idssh-key-설정중-발생한-오류ssh-key-설정중-발생한-오류div&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#div-idssh-key-%EC%84%A4%EC%A0%95%EC%A4%91-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%98%A4%EB%A5%98ssh-key-%EC%84%A4%EC%A0%95%EC%A4%91-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%98%A4%EB%A5%98div&quot; aria-label=&quot;div idssh key 설정중 발생한 오류ssh key 설정중 발생한 오류div permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;&lt;div id=&quot;ssh-key-설정중-발생한-오류&quot;&gt;ssh key 설정중 발생한 오류&lt;/div&gt;&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;$ &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; -T test@github.com &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; 잘못되었음
+test@github.com: Permission denied &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;publickey&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;명령어 잘못 입력함.&lt;br&gt;
+ssh -T git@test =&gt; 이렇게 되어야함.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;\&lt;/span&gt;$ &lt;span class=&quot;token function&quot;&gt;ssh&lt;/span&gt; -T git_id@git_id.github.com &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; 잘못되었음
+ssh: connect to &lt;span class=&quot;token function&quot;&gt;host&lt;/span&gt; git_id.github.com port &lt;span class=&quot;token number&quot;&gt;22&lt;/span&gt;: Connection timed out&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;명령어 잘못 입력함.&lt;br&gt;
+ssh -T git@test =&gt; 이렇게 되어야함.&lt;/p&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[github 멀티계정 사용하기 - 자격증명관리자]]></title><description><![CDATA[Windows 10 시스템에서 github 계정 변경 후 커밋진행시 오류발생 발생오류 => permission denied. 원인 신규 프로젝트를 생성후 github계정을 바꿔서 commit 진행시
+이전 gihub…]]></description><link>https://dryadsoft.github.io/git/github-멀티계정-사용하기---자격증명관리자/</link><guid isPermaLink="false">https://dryadsoft.github.io/git/github-멀티계정-사용하기---자격증명관리자/</guid><pubDate>Wed, 04 Nov 2020 06:11:40 GMT</pubDate><content:encoded>&lt;h2 id=&quot;windows-10-시스템에서-github-계정-변경-후-커밋진행시-오류발생&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#windows-10-%EC%8B%9C%EC%8A%A4%ED%85%9C%EC%97%90%EC%84%9C-github-%EA%B3%84%EC%A0%95-%EB%B3%80%EA%B2%BD-%ED%9B%84-%EC%BB%A4%EB%B0%8B%EC%A7%84%ED%96%89%EC%8B%9C-%EC%98%A4%EB%A5%98%EB%B0%9C%EC%83%9D&quot; aria-label=&quot;windows 10 시스템에서 github 계정 변경 후 커밋진행시 오류발생 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Windows 10 시스템에서 github 계정 변경 후 커밋진행시 오류발생&lt;/h2&gt;
+&lt;h2 id=&quot;발생오류--permission-denied&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EB%B0%9C%EC%83%9D%EC%98%A4%EB%A5%98--permission-denied&quot; aria-label=&quot;발생오류  permission denied permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;발생오류 =&gt; permission denied.&lt;/h2&gt;
+&lt;h2 id=&quot;원인&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EC%9B%90%EC%9D%B8&quot; aria-label=&quot;원인 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;원인&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;신규 프로젝트를 생성후 github계정을 바꿔서 commit 진행시
+이전 gihub 아이디가 남아있어서 permission denied 오류가 발생하는 경우가 생깁니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;해결방법&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%ED%95%B4%EA%B2%B0%EB%B0%A9%EB%B2%95&quot; aria-label=&quot;해결방법 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;해결방법&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;왼쪽하단 검색창에서 “자격 증명 관리자” 입력 후 검색한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 833px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAABuklEQVQoz+WRzWsTQRjG908SaXaJJ0EKgl5FL9JCpSgYCS1Cj/4JHkQL7U1Ka+nVr0tFkdgyWSrNxybZZLMfaUrt7MfsNDPZnd2sb9aDBj316sPLyzsP72/mgZGKsvL29bb65VBDNQ0d699b3eNOt9bpHGm+M8yyLEmSNE2TRPALT8RRPifgG4YhFa8Wdl9u7nxU13e+buxVtj40dvf1N/v61vtGHzVhaZKm0IWIGpX1aIRhTnPHsS2pqCjvtvfaat3RDKdlOFrPbvZsrWfW2uHp2RSeTKBTSvEPOwwDIcQvxzRNSVGUyuEBdrFlW4Ph4Nw9h6IjSihhY57lgm3GmOv5QUAg829YluUqQmzEXIy9XD6UD80DU6QTeCqb1SxcrXLOYTv4Q8AzxiORjjm/HMyyf+n/hucKMkLokvD1awX1SOVx5JEgoCGhlIQhyWn+1yfNwn3pyt0V9PnbxeDENUy/b+GugU9OcUCwF7ieRwhcRCDFNAyBEw3pVHE0brS70vyd5fqng6E10OutXrNDzlyq9wmP4yx7/uLV7VvzpccLa2tPn5TLpQfL5cWbpZVHS6vPlhbv37j38Cfffhh3zPQyVAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200113001 1&quot;
+        title=&quot;20200113001 1&quot;
+        src=&quot;/static/57a87f1dcefeca5a5a4557dbc4720db3/5205c/20200113001_1.png&quot;
+        srcset=&quot;/static/57a87f1dcefeca5a5a4557dbc4720db3/5a46d/20200113001_1.png 300w,
+/static/57a87f1dcefeca5a5a4557dbc4720db3/0a47e/20200113001_1.png 600w,
+/static/57a87f1dcefeca5a5a4557dbc4720db3/5205c/20200113001_1.png 833w&quot;
+        sizes=&quot;(max-width: 833px) 100vw, 833px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;“Windows 자격증명” 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1122px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.666666666666664%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAAsSAAALEgHS3X78AAAA5UlEQVQoz9WSTU/DMAyG+/9/EFw5ckJMaAgJgdpOG2U0ZMuHkzqJjZtKaOUGNx45smP5deIojTWfSo0nrax13glWSAuIi5+EGMF7AMBKCAEgNIg5YS4lC8aGs4GEE+UkGWIuTIVmm+OyeJ4XsxQ2pSIbadAOY/+u35QdtB9GMz6/6q7T/c4fDhwjr5FGzXc8Ed88bG5fjndD2Sje7tPT1bV6vPdtn9qOjh+L4lLfXHZyHjBTKpSrcUZC5CypRPV2P1iJAaJzMU5Yx5ShCQImmYdJXoTWx67Ef+C/is/G6pOp3+nXfAG+lYZSaN99OwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200113001 2&quot;
+        title=&quot;20200113001 2&quot;
+        src=&quot;/static/e650d6e01cca0c33b1fab52c56fb75f4/62a6a/20200113001_2.png&quot;
+        srcset=&quot;/static/e650d6e01cca0c33b1fab52c56fb75f4/5a46d/20200113001_2.png 300w,
+/static/e650d6e01cca0c33b1fab52c56fb75f4/0a47e/20200113001_2.png 600w,
+/static/e650d6e01cca0c33b1fab52c56fb75f4/62a6a/20200113001_2.png 1122w&quot;
+        sizes=&quot;(max-width: 1122px) 100vw, 1122px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;“git:&lt;a href=&quot;https://github.com&quot;&gt;https://github.com&lt;/a&gt;” 클릭 후 “편집”을 클릭한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1123px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.333333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAAsSAAALEgHS3X78AAABWUlEQVQoz41S2W6DMBDk/7+qT03VSkWR2jQJOUgCiNuxjW18YHfBaUXVVOoIgWa1M14vEwhGMMZdh/u+55wzzoUQ7gbrP8MENcFO0BMCpYxS2g4GCKG8RYSMXgAqeilGRyYEB4G38GJwlFIGQKEERFu3Ob6hOpdSgZfUdrHcPW0uzzFZ5mrdOqFvw3gxISSYT1i2xTi2tsqMNK2apKUZdTmzBXN6+Gr9JR5rHZOk41IbpYepY2wajOmlFr32mvtimL+umrputFbOX9AYeCHSl0hUVwHsTzGUCOsoZ9b9AFAD6/le/f2TpTy8rPbhNlufk/e4jC7NIW2PWbqKt+H+EEYSYa/0YvjBszsbk8O6F6/hw2MRnfJNDEqalPicozjHx8RQ6s/17RCKYJ4GckmLJBVKuX8A1hGgK24aBPGCYCUf+9MuIR3jjLFufCArWVanWV1VLdTEDJTSTw3Ne+fpPyDCAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200113001 3&quot;
+        title=&quot;20200113001 3&quot;
+        src=&quot;/static/82ff5ab3bb71708bc94c5c23000f8929/e751c/20200113001_3.png&quot;
+        srcset=&quot;/static/82ff5ab3bb71708bc94c5c23000f8929/5a46d/20200113001_3.png 300w,
+/static/82ff5ab3bb71708bc94c5c23000f8929/0a47e/20200113001_3.png 600w,
+/static/82ff5ab3bb71708bc94c5c23000f8929/e751c/20200113001_3.png 1123w&quot;
+        sizes=&quot;(max-width: 1123px) 100vw, 1123px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;일반 자격 증명 편집 화면에서 사용자이름, 암호 변경 후 저장한다.
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 1124px; &quot;
+    &gt;
+      &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.333333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAIAAADwazoUAAAACXBIWXMAAAsSAAALEgHS3X78AAAAy0lEQVQoz52QTRLCIAyFuf9p3Lv1GK5caFtbC8hvCNQUpnWq7Yz2WzAZyEsej0necc5F3zrnrbXOjjjnlFKIOGRiBgBCCCkTMgxjGp9xxHvgwnRcKW1DGFsRS1uIE0VMEjoZYhwmaPatqpvmXlU1FVJKrbXRhiiCDxgNe4sD9H1PxflyPRxPLZcGknK4Jsxicpsmiiu6Jc9cCFoI2ffTgtCegphtFxa2y0++NzykrjtBuc4Rrtj+FxaXw1aZfe4Rb25OW1H+IqYMYS8vIG6I+74L79cAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;20200113001 4&quot;
+        title=&quot;20200113001 4&quot;
+        src=&quot;/static/5bdff459ca127ab2785f67a3b01c7631/11b93/20200113001_4.png&quot;
+        srcset=&quot;/static/5bdff459ca127ab2785f67a3b01c7631/5a46d/20200113001_4.png 300w,
+/static/5bdff459ca127ab2785f67a3b01c7631/0a47e/20200113001_4.png 600w,
+/static/5bdff459ca127ab2785f67a3b01c7631/11b93/20200113001_4.png 1124w&quot;
+        sizes=&quot;(max-width: 1124px) 100vw, 1124px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+    &lt;/span&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;위와 같이 하면 조금은 번거롭지만 Github 계정을 변경 하면서 commit이 가능하다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;note&quot;&gt;&lt;pre class=&quot;language-note&quot;&gt;&lt;code class=&quot;language-note&quot;&gt;ssh key생성을 하여 관리하면 자격증명관리자에서 변경하지 않고 좀더 편하게 진행 할 수 있다.
+ssh key방법은 다음 포스트에 작성하도록 하겠다.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Quick Start]]></title><description><![CDATA[Getting Started 😎 1. Create a Gatsby site. If you are not using , following Gatsby Getting Started 2. Start developing. 3. Add your content…]]></description><link>https://dryadsoft.github.io/development/quick_start/</link><guid isPermaLink="false">https://dryadsoft.github.io/development/quick_start/</guid><pubDate>Sun, 05 Jul 2020 17:21:13 GMT</pubDate><content:encoded>&lt;h1 id=&quot;getting-started-&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#getting-started-&quot; aria-label=&quot;getting started  permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Getting Started 😎&lt;/h1&gt;
+&lt;h2 id=&quot;1-create-a-gatsby-site&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#1-create-a-gatsby-site&quot; aria-label=&quot;1 create a gatsby site permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;1. Create a Gatsby site.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;# create a new Gatsby site using the blog starter
+$ npx gatsby new my-blog-starter https://github.com/JaeYeopHan/gatsby-starter-bee&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you are not using &lt;code class=&quot;language-text&quot;&gt;npx&lt;/code&gt;, following &lt;a href=&quot;https://www.gatsbyjs.org/docs/quick-start&quot;&gt;Gatsby Getting Started&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;$ npm install -g gatsby-cli
+$ gatsby new my-blog-starter https://github.com/JaeYeopHan/gatsby-starter-bee&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;2-start-developing&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#2-start-developing&quot; aria-label=&quot;2 start developing permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;2. Start developing.&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;$ cd my-blog-starter/
+$ npm start
+# open localhost:8000&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;3-add-your-content&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#3-add-your-content&quot; aria-label=&quot;3 add your content permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;3. Add your content&lt;/h2&gt;
+&lt;p&gt;You can write…&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;contents to blog in &lt;code class=&quot;language-text&quot;&gt;content/blog&lt;/code&gt; directory.&lt;/li&gt;
+&lt;li&gt;resume &lt;code class=&quot;language-text&quot;&gt;content/__about&lt;/code&gt; directory.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;With markdown syntax and some meta data&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;support-script-for-creating-new-post&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#support-script-for-creating-new-post&quot; aria-label=&quot;support script for creating new post permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Support script for creating new post&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;/34628ec574f22bee7a31c7f208a84e79/cli-tool-example.gif&quot;&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;$ npm run post&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;4-fix-meta-data&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#4-fix-meta-data&quot; aria-label=&quot;4 fix meta data permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;4. Fix meta data&lt;/h2&gt;
+&lt;p&gt;You can fix meta data of blog in &lt;code class=&quot;language-text&quot;&gt;/gatsby-meta-config.js&lt;/code&gt; file.&lt;/p&gt;
+&lt;h2 id=&quot;5-publish-with-netlify&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#5-publish-with-netlify&quot; aria-label=&quot;5 publish with netlify permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;5. Publish with &lt;a href=&quot;https://netlify.com&quot;&gt;netlify&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://app.netlify.com/start/deploy?repository=https://github.com/JaeYeopHab/gatsby-starter-bee&quot;&gt;&lt;img src=&quot;https://www.netlify.com/img/deploy/button.svg&quot; alt=&quot;Deploy to Netlify&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;💡 if you want to deploy github pages, add following script to package.json&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;json&quot;&gt;&lt;pre class=&quot;language-json&quot;&gt;&lt;code class=&quot;language-json&quot;&gt;&lt;span class=&quot;token property&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;token property&quot;&gt;&quot;deploy&quot;&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;gatsby build &amp;amp;&amp;amp; gh-pages -d public -b master -r &apos;git@github.com:${your github id}/${github page name}.github.io.git&apos;&quot;&lt;/span&gt;
+&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1 id=&quot;memo-write-a-post&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#memo-write-a-post&quot; aria-label=&quot;memo write a post permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;:memo: Write a post!&lt;/h1&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;content
+├── __about
+└── blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;You can register your resume on the web. (in &lt;code class=&quot;language-text&quot;&gt;__about&lt;/code&gt; directory)&lt;/li&gt;
+&lt;li&gt;You can register your post. (in &lt;code class=&quot;language-text&quot;&gt;blog&lt;/code&gt; directory)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;🧐-customize&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%F0%9F%A7%90-customize&quot; aria-label=&quot;🧐 customize permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;🧐 Customize!&lt;/h1&gt;
+&lt;h2 id=&quot;gatsby-config&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#gatsby-config&quot; aria-label=&quot;gatsby config permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Gatsby config&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;/root
+├── gatsby-browser.js // font, polyfill, onClientRender ...
+├── gatsby-config.js // Gatsby config
+├── gatsby-meta-config.js // Template meta config
+└── gatsby-node.js // Gatsby Node config&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;structure&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#structure&quot; aria-label=&quot;structure permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Structure&lt;/h2&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;src
+├── components // Just component with styling
+├── layout // home, post layout
+├── pages // routing except post: /(home), /about
+├── styles
+│   ├── code.scss
+│   ├── dark-theme.scss
+│   ├── light-theme.scss
+│   └── variables.scss
+└── templates
+    ├── blog-post.js
+    └── home.js&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;style&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#style&quot; aria-label=&quot;style permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Style&lt;/h2&gt;
+&lt;p&gt;You can customize color in &lt;code class=&quot;language-text&quot;&gt;src/styles&lt;/code&gt; directory.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;src/styles
+├── code.scss
+├── dark-theme.scss
+├── light-theme.scss
+└── variables.scss&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Welcome to gatsby-starter-bee!
+Happy blogging! 👻&lt;/p&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Category Test1]]></title><description><![CDATA[gulp.js]]></description><link>https://dryadsoft.github.io/gulp.js/test1/</link><guid isPermaLink="false">https://dryadsoft.github.io/gulp.js/test1/</guid><pubDate>Thu, 02 Jul 2020 16:21:13 GMT</pubDate><content:encoded>&lt;p&gt;gulp.js&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Category Test3]]></title><description><![CDATA[react-native]]></description><link>https://dryadsoft.github.io/react-native/test3/</link><guid isPermaLink="false">https://dryadsoft.github.io/react-native/test3/</guid><pubDate>Thu, 02 Jul 2020 16:21:13 GMT</pubDate><content:encoded>&lt;p&gt;react-native&lt;/p&gt;</content:encoded></item><item><title><![CDATA[간단한 git 사용법]]></title><description><![CDATA[프로젝트 git 생성 새 리포지토리 remote 추가 기존 리포지토리 remote 제거 branch 생성 branch 삭제]]></description><link>https://dryadsoft.github.io/git/간단한-git-사용법/</link><guid isPermaLink="false">https://dryadsoft.github.io/git/간단한-git-사용법/</guid><pubDate>Sun, 05 Jan 2020 11:40:13 GMT</pubDate><content:encoded>&lt;h3 id=&quot;프로젝트-git-생성&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-git-%EC%83%9D%EC%84%B1&quot; aria-label=&quot;프로젝트 git 생성 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;프로젝트 git 생성&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; init&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;새-리포지토리-remote-추가&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EC%83%88-%EB%A6%AC%ED%8F%AC%EC%A7%80%ED%86%A0%EB%A6%AC-remote-%EC%B6%94%EA%B0%80&quot; aria-label=&quot;새 리포지토리 remote 추가 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;새 리포지토리 remote 추가&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; origin 리포지토리url&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;기존-리포지토리-remote-제거&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#%EA%B8%B0%EC%A1%B4-%EB%A6%AC%ED%8F%AC%EC%A7%80%ED%86%A0%EB%A6%AC-remote-%EC%A0%9C%EA%B1%B0&quot; aria-label=&quot;기존 리포지토리 remote 제거 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;기존 리포지토리 remote 제거&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; remote remove origin&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;branch-생성&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#branch-%EC%83%9D%EC%84%B1&quot; aria-label=&quot;branch 생성 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;branch 생성&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin 브랜치명&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3 id=&quot;branch-삭제&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#branch-%EC%82%AD%EC%A0%9C&quot; aria-label=&quot;branch 삭제 permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;branch 삭제&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;shell&quot;&gt;&lt;pre class=&quot;language-shell&quot;&gt;&lt;code class=&quot;language-shell&quot;&gt;&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin --delete 브랜치명&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[about]]></title><description><![CDATA[Your name Thank you for reading my resume. If you want to contact me, Please send me an email.]]></description><link>https://dryadsoft.github.io/resume-en/</link><guid isPermaLink="false">https://dryadsoft.github.io/resume-en/</guid><pubDate>Sun, 27 Jan 2019 16:21:13 GMT</pubDate><content:encoded>&lt;h1 id=&quot;your-name&quot; style=&quot;position:relative;&quot;&gt;&lt;a href=&quot;#your-name&quot; aria-label=&quot;your name permalink&quot; class=&quot;anchor before&quot;&gt;true&lt;/a&gt;Your name&lt;/h1&gt;
+&lt;div align=&quot;center&quot;&gt;
+&lt;p&gt;&lt;em&gt;Thank you for reading my resume. If you want to contact me, Please send me an email.&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;</content:encoded></item></channel></rss>
