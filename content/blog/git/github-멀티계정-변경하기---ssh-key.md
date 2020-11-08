@@ -1,0 +1,146 @@
+---
+title: github 멀티계정 변경하기 - ssh key
+date: 2020-11-04 06:11:87
+category: git
+thumbnail: { thumbnailSrc }
+draft: false
+---
+
+### 목차
+
+[1. SSH KEY 생성](#ssh-key-생성)
+
+[2. Gitbub에 ssh public key 등록](#gitbub에-ssh-public-key-등록)
+
+[3. ssh config 파일 설정](#ssh-config-파일-설정)
+
+[4. ssh 명령어 모음](#ssh-명령어-모음)
+
+[5. ssh key 설정중 발생한 오류](#ssh-key-설정중-발생한-오류)
+
+### Github의 여러계정 등록하기
+
+> github를 사용하다보면 프로젝트마다 다른 계정을 사용해야 하는 경우가 발생한다.
+> 이럴때 마다 앞의 [포스트](https://dryadsoft.github.io/#/posts/git/6)에 작성했던 방법으로 계정을 변경하면 매우 귀찮다.
+> 그리고 설정이 제대로 되어있지 않으면 **permission denied** 오류가 발생하는 경우가 생긴다.
+
+## <div id="ssh-key-생성">SSH KEY 생성</div>
+
+[GitHub Help](https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) 페이지에 나와있는 설명대로 **SSH** KEY를 생성한다.
+
+1. git bash를 연다.
+
+2. ssh key를 생성할 github의 이메일 계정을 입력 후 아래 명령어를 실행한다.
+
+```shell
+    > ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+3. git bash에 아래 문구가 나오면 key가 생성될 위치를 지정해준다.
+
+- 지정하지 않고 엔터키를 누르면 기본경로에 저장 된다.
+- 여러계정을 등록할 경우 같은경로에 같은이름으로 등록되면 안되기때문에 경로를 변경해준다.
+- 경로변경시 해당 경로는 반드시 존재하여야한다.
+
+```
+> Enter a file in which to save the key (/c/Users/you/.ssh/id_rsa):[Press enter]
+```
+
+4. ssh-add 명령어로 key를 등록한다.
+
+```shell
+    > ssh-add ~/.ssh/id_rsa   => "생성된 id_rsa 키"
+```
+
+5. 위 방법으로 하면 Windows 10 에서 아래 오류가 발생한다.
+
+```shell
+    > Could not open a connection to your authentication agent.
+```
+
+> > 아래 명령어로 ssh-agent를 background로 실행시키고 다시 ssh-add명령어를 사용하면 오류가 발생하지 않는다.
+
+```shell
+    > eval $(ssh-agent -s)
+    Agent pid 2144
+    > ssh-add ~/.ssh/id_rsa   => "생성된 id_rsa 키"
+```
+
+6. ssh-add가 정상적으로 등록되었는지 조회한다..
+
+```shell
+    > ssh-add -l
+    4096 SHA256:aCB.........UT your@email.com (RSA)
+```
+
+## <div id="gitbub에-ssh-public-key-등록">Gitbub에 ssh public key 등록</div>
+
+> 가지고 있는 Github의 계정마다 아래의 방법대로 반복을 하면된다.
+
+1.  [Github](https://github.com/login)에 로그인한다.
+    ![](./images/20200118001_1.png)
+2.  로그인 후 오른쪽 위 메뉴를 클릭하여 Settings를 선택한다.
+    ![](./images/20200118001_2.png)
+3.  SSH and GPG keys를 선택한다.
+    ![](./images/20200118001_3.png)
+4.  NeW SSH key를 선택한다.
+    ![](./images/20200118001_4.png)
+5.  "Title" 과 "Key"를 입력후 "Add SSH key"버튼을 누른다.
+    ![](./images/20200118001_5.png)
+6.  아래와같이 SSH key가 정상적으로 등록된다.
+    ![](./images/20200118001_6.png)
+
+## <div id="ssh-config-파일-설정">ssh config 파일 설정</div>
+
+- C:\Users\사용자계정\.ssh폴더에 config 파일을 편집기로 연다.(파일이 존재하지 않으면 새로 만들어준다.)
+
+- config 파일을 작성한다.
+
+```shell
+    Host test                   => "ssh 명령어에서 사용할 단어"
+    HostName github.com         => "github 도메인"
+    User github_id              => "github 사용자 아이디"
+    IdentityFile ~/.ssh/id_rsa  => "생성된 개인키 경로"
+
+    또는
+
+    Host test                   => "ssh 명령어에서 사용할 단어"
+    User github_id              => "github 사용자 아이디"
+    Hostname ssh.github.com     => "github 도메인"
+    PreferredAuthentications publickey  => 인증키
+    IdentityFile ~/.ssh/id_rsa   => "생성된 개인키 경로"
+    Port 443                    => ssh 포트
+```
+
+```shell
+    > ssh -T git@test
+    Hi "your User"! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+## <div id="ssh-명령어-모음">ssh 명령어 모음</div>
+
+```shell
+> eval $(ssh-agent -s)  => ssh-agent background실행
+> ssh-add ~/.ssh/id_rsa => ssh 개인키 추가
+> ssh-add -l            => ssh 추가 조회
+> ssh -T git@"config파일의 Host"    => ssh 접속 테스트
+
+```
+
+## <div id="ssh-key-설정중-발생한-오류">ssh key 설정중 발생한 오류</div>
+
+```shell
+\$ ssh -T test@github.com => 잘못되었음
+test@github.com: Permission denied (publickey).
+```
+
+> 명령어 잘못 입력함.<br>
+> ssh -T git@test => 이렇게 되어야함.
+
+```shell
+\$ ssh -T git_id@git_id.github.com > 잘못되었음
+ssh: connect to host git_id.github.com port 22: Connection timed out
+```
+
+> 명령어 잘못 입력함.<br>
+> ssh -T git@test => 이렇게 되어야함.

@@ -1,9 +1,9 @@
 module.exports = {
-  title: `Bee starter`,
+  title: `Dryad`,
   description: `Blog posted about ...`,
-  author: `[Your Name]`,
-  introduction: `I explain with words and code. I explain with words and code. I explain with words and code.`,
-  siteUrl: `https://gatsby-starter-bee.netlify.com`, // Your blog site url
+  author: `dryad`,
+  introduction: `frontEnd 개발에 관심이 많은 개발자의 개발블로그입니다.`,
+  siteUrl: `https://dryadsoft.github.io/`, // Your blog site url
   social: {
     twitter: ``, // Your Twitter account
     github: ``, // Your GitHub account
@@ -11,11 +11,11 @@ module.exports = {
     facebook: ``, // Your Facebook account
     linkedin: ``, // Your LinkedIn account
   },
-  icon: `content/assets/felog.png`, // Add your favicon
-  keywords: [`blog`],
+  icon: `content/assets/favicon.png`, // Add your favicon
+  keywords: [`blog,react,nodejs,node,javascript,es6,reactjs,reactnative`],
   comment: {
     disqusShortName: '', // Your disqus-short-name. check disqus.com.
-    utterances: 'JaeYeopHan/gatsby-starter-bee', // Your repository for archive comment
+    utterances: 'dryadsoft/dryadsoft.github.io', // Your repository for archive comment
   },
   configs: {
     countOfInitialPost: 10, // Config your initial count of post
@@ -26,5 +26,6 @@ module.exports = {
   share: {
     facebookAppId: '', // Add facebookAppId for using facebook share feature v3.2
   },
-  ga: '', // Add your google analytics tranking ID
+  ga: '181964450', // Add your google analytics tranking ID
+  gads: 'ca-pub-6129182328804743', // Add your google adsense id
 }
