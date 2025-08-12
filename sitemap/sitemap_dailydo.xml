@@ -8,6 +8,10 @@
   xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
 >
   <url>
+    <loc>https://dryadsoft.github.io/dailydo/support</loc>
+    <lastmod>2025-08-12T12:59:07.661Z</lastmod>
+  </url>
+  <url>
     <loc>https://dryadsoft.github.io/dailydo/privacy-policy</loc>
     <lastmod>2025-08-04T13:23:23.218Z</lastmod>
   </url>
