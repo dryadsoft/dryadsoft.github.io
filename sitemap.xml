@@ -2,28 +2,36 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_bookmark.xml.gz</loc>
-    <lastmod>2025-08-22T11:24:31.788Z</lastmod>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://dryadsoft.github.io/sitemap/sitemap_booktower.xml.gz</loc>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_busroad.xml.gz</loc>
-    <lastmod>2025-08-22T11:24:31.788Z</lastmod>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_dailydo.xml.gz</loc>
-    <lastmod>2025-08-22T11:24:31.788Z</lastmod>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_directory.xml.gz</loc>
-    <lastmod>2025-08-22T11:24:31.788Z</lastmod>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
   </sitemap>
   <sitemap>
     <loc
       >https://dryadsoft.github.io/sitemap/sitemap_magicabilitytest.xml.gz</loc
     >
-    <lastmod>2025-08-22T11:24:31.788Z</lastmod>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://dryadsoft.github.io/sitemap/sitemap_root.xml.gz</loc>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_tripnote.xml.gz</loc>
-    <lastmod>2025-08-22T11:24:31.788Z</lastmod>
+    <lastmod>2026-01-23T04:50:13.462Z</lastmod>
   </sitemap>
 </sitemapindex>
