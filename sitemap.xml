@@ -2,36 +2,52 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_bookmark.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_booktower.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc
+      >https://dryadsoft.github.io/sitemap/sitemap_booktower_landing_en.xml.gz</loc
+    >
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc
+      >https://dryadsoft.github.io/sitemap/sitemap_booktower_landing_ko.xml.gz</loc
+    >
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://dryadsoft.github.io/sitemap/sitemap_braintraning.xml.gz</loc>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_busroad.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_dailydo.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_directory.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc
       >https://dryadsoft.github.io/sitemap/sitemap_magicabilitytest.xml.gz</loc
     >
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_root.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_tripnote.xml.gz</loc>
-    <lastmod>2026-01-24T07:30:54.440Z</lastmod>
+    <lastmod>2026-03-13T11:46:32.239Z</lastmod>
   </sitemap>
 </sitemapindex>

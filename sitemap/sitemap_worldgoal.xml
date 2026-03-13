@@ -8,11 +8,15 @@
   xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
 >
   <url>
-    <loc>https://dryadsoft.github.io</loc>
+    <loc>https://dryadsoft.github.io/worldgoal/support</loc>
     <lastmod>2026-03-13T12:34:19.733Z</lastmod>
   </url>
   <url>
-    <loc>https://dryadsoft.github.io/apps</loc>
-    <lastmod>2025-05-29T05:29:25.189Z</lastmod>
+    <loc>https://dryadsoft.github.io/worldgoal/privacy-policy</loc>
+    <lastmod>2026-03-13T12:34:19.733Z</lastmod>
+  </url>
+  <url>
+    <loc>https://dryadsoft.github.io/worldgoal/landing</loc>
+    <lastmod>2026-03-13T12:34:19.733Z</lastmod>
   </url>
 </urlset>
