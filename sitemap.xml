@@ -106,4 +106,8 @@
     <loc>https://dryadsoft.github.io/sitemap/sitemap_worldgoal.xml.gz</loc>
     <lastmod>2026-10-02T05:08:08.194Z</lastmod>
   </sitemap>
+  <sitemap>
+    <loc>https://dryadsoft.github.io/sitemap/sitemap_freezebatch.xml.gz</loc>
+    <lastmod>2026-10-10T02:50:55.233Z</lastmod>
+  </sitemap>
 </sitemapindex>
