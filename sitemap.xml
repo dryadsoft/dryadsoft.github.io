@@ -54,7 +54,7 @@
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_directory.xml.gz</loc>
-    <lastmod>2026-10-02T05:08:08.194Z</lastmod>
+    <lastmod>2026-10-14T08:09:20.741Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_fieldproofmemo.xml.gz</loc>
@@ -109,5 +109,9 @@
   <sitemap>
     <loc>https://dryadsoft.github.io/sitemap/sitemap_freezebatch.xml.gz</loc>
     <lastmod>2026-10-10T02:50:55.233Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://dryadsoft.github.io/sitemap/sitemap_plantcarenote.xml.gz</loc>
+    <lastmod>2026-10-14T08:09:20.741Z</lastmod>
   </sitemap>
 </sitemapindex>
